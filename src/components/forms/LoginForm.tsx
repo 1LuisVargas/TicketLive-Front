@@ -113,7 +113,7 @@ export default function LoginForm() {
         className="mt-4 w-full flex items-center justify-center gap-3 bg-white border border-gray-300 text-gray-700 px-4 py-3 rounded-lg hover:bg-gray-50 transition-colors shadow-s"
         href={`${process.env.NEXT_PUBLIC_API_URL}auth/google/login`}
       >
-        <span className="font-medium">Inicia sesión con tu cuenta con Google</span>
+        <span className="font-medium">Inicia sesión con Google</span>
         <svg className="w-5 h-5" viewBox="0 0 24 24">
           <path
             fill="#4285F4"
