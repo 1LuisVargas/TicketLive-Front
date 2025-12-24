@@ -12,9 +12,6 @@ export default function RegisterPage() {
         descarga tus boletos de forma rápida y segura.
       </h2>
       <RegisterForm />
-      <h2>O crea tu cuenta con {" "}
-        <Link className="text-blue-600 hover:underline" href={`${process.env.NEXT_PUBLIC_API_URL}auth/google/register`}>Google</Link>
-      </h2>
       <h3 className="text-lg mb-9">
         ¿Ya tienes una cuenta de TicketLive?{" "}
         <Link href="/login" className="text-blue-600 hover:underline">
