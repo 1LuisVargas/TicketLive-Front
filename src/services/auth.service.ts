@@ -1,24 +1,9 @@
 import { RegisterFormValuesType } from "@/validators/registerSchema";
 import { LoginFormValuesType } from "@/validators/loginSchema";
 
-/**
- * 🔧 CONFIGURACIÓN DE LA API
- * 
- * La URL del backend se obtiene de las variables de entorno.
- * Para configurarlo, crea un archivo .env.local en la raíz del proyecto con:
- * NEXT_PUBLIC_API_URL=http://localhost:3001
- * 
- * El prefijo NEXT_PUBLIC_ es necesario para que Next.js exponga
- * la variable al navegador (client-side).
- */
+
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
 
-/**
- * 📦 TIPOS DE RESPUESTA DEL BACKEND
- * 
- * Estos tipos definen la estructura de las respuestas que esperamos
- * del backend. Ajústalos según tu API real.
- */
 export interface AuthResponse {
   success: boolean;
   message: string;
@@ -31,30 +16,33 @@ export interface AuthResponse {
   };
 }
 
+
+/**** */
+export class AuthError extends Error {
+  status: number;
+  constructor(message: string, status: number) {
+    super(message);
+    this.status = status;
+    this.name = "AuthError";
+  }
+}
+/**** */
+
+
+
 export interface ApiError {
   message: string;
   errors?: Record<string, string[]>;
 }
 
-/**
- * 🔐 MANEJO DE TOKENS
- * 
- * Funciones para guardar, obtener y eliminar el token de autenticación
- * en localStorage. Esto permite mantener la sesión del usuario.
- */
 export const tokenManager = {
-  /**
-   * Guarda el token en localStorage
-   */
   setToken: (token: string): void => {
     if (typeof window !== "undefined") {
       localStorage.setItem("auth_token", token);
     }
   },
 
-  /**
-   * Obtiene el token de localStorage
-   */
+
   getToken: (): string | null => {
     if (typeof window !== "undefined") {
       return localStorage.getItem("auth_token");
@@ -62,9 +50,7 @@ export const tokenManager = {
     return null;
   },
 
-  /**
-   * Elimina el token de localStorage (logout)
-   */
+
   removeToken: (): void => {
     if (typeof window !== "undefined") {
       localStorage.removeItem("auth_token");
@@ -85,26 +71,19 @@ export const registerUser = async (
   userData: RegisterFormValuesType
 ): Promise<AuthResponse> => {
   try {
-    // 1️⃣ Hacemos la petición POST al backend
     const response = await fetch(`${API_URL}/auth/register`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(userData),
     });
-
-    // 2️⃣ Parseamos la respuesta JSON
     const data = await response.json();
 
-    // 3️⃣ Si la respuesta no es OK (status 200-299), lanzamos un error
+
     if (!response.ok) {
-      // El backend puede enviar un mensaje de error específico
       throw new Error(data?.message || "Error al registrar usuario");
     }
-
-    // 4️⃣ Si el registro fue exitoso, retornamos los datos
     return data;
   } catch (error) {
-    // 5️⃣ Manejo de errores de red o del servidor
     if (error instanceof Error) {
       throw error;
     }
@@ -126,7 +105,6 @@ export const loginUser = async (
   userData: LoginFormValuesType
 ): Promise<AuthResponse> => {
   try {
-    // 1️⃣ Hacemos la petición POST al backend
     const response = await fetch(`${API_URL}/auth/login`, {
       method: "POST",
       headers: {
@@ -134,24 +112,17 @@ export const loginUser = async (
       },
       body: JSON.stringify(userData),
     });
-
-    // 2️⃣ Parseamos la respuesta JSON
     const data = await response.json();
 
-    // 3️⃣ Si la respuesta no es OK, lanzamos un error
     if (!response.ok) {
       throw new Error(data?.message || "Error al iniciar sesión");
     }
 
-    // 4️⃣ Si el login fue exitoso y hay un token, lo guardamos
     if (data.token) {
       tokenManager.setToken(data.token);
     }
-
-    // 5️⃣ Retornamos los datos del usuario
     return data;
   } catch (error) {
-    // 6️⃣ Manejo de errores
     if (error instanceof Error) {
       throw error;
     }
@@ -170,21 +141,16 @@ export const fetchUserProfile = async (): Promise<AuthResponse['user']> => {
     const data = await response.json();
 
     if (!response.ok) {
-      throw new Error(data?.message || "Error al obtener perfil");
+      throw new AuthError(data?.message || "Error al obtener perfil", response.status);
     }
 
-    return data; // Asumimos que el backend devuelve el objeto de usuario directamente o dentro de data
+    return data;
   } catch (error) {
     throw error;
   }
 };
 
-/**
- * 🚪 FUNCIÓN DE LOGOUT
- * 
- * Cierra la sesión del usuario eliminando el token.
- * Opcionalmente, puedes hacer una petición al backend para invalidar el token.
- */
+
 export const logoutUser = (): void => {
   tokenManager.removeToken();
 
