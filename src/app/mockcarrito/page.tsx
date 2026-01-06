@@ -28,7 +28,7 @@ export default function MockCartPage() {
                 />
               </div>
 
-              {/* INFO */}
+              {/* INFORMACIÓN */}
               <div className="mb-4">
                 <h2 className="text-lg font-semibold">
                   {concert.name}
@@ -38,7 +38,7 @@ export default function MockCartPage() {
                 </p>
               </div>
 
-              {/* ACTIONS */}
+              {/* ACCIONES */}
               <div className="mt-auto flex items-center justify-between">
                 <span className="text-xl font-bold text-primary">
                   ${concert.price.toFixed(2)}
@@ -48,7 +48,7 @@ export default function MockCartPage() {
                   onClick={() => addToCart(concert)}
                   className="px-4 py-2 rounded-lg bg-gradient-to-r from-purple-600 to-pink-600 text-white font-medium shadow-lg shadow-purple-500/40 hover:from-purple-700 hover:to-pink-700 transition"
                 >
-                  Add to cart
+                  Agregar al carrito
                 </button>
               </div>
             </div>

@@ -44,18 +44,18 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   //ACCIONES
   const addToCart = (product: Product) => {
     if (!isLoggedIn) {
-      toast.error("You must sign in to add items to the cart");
+      toast.error("Debes estar logueado para agregar productos al carrito");
       return;
     }
 
     const exists = cartItems.some(item => item.id === product.id);
     if (exists) {
-      toast.warning("This item is already in your cart");
+      toast.warning("Este producto ya está en tu carrito");
       return;
     }
 
     setCartItems(prev => [...prev, product]);
-    toast.success("Added to cart");
+    toast.success("Producto agregado al carrito");
   };
 
   const removeFromCart = (productId: number) => {
