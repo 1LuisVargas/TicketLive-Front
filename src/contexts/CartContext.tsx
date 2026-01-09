@@ -2,20 +2,20 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
-import { Product } from "@/interfaces/event.interface";
+import IEvent from "@/interfaces/event.interface";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
 
-type CartItem = Product & {
+type CartItem = IEvent & {
   quantity: number;
 };
 
 interface CartContextType {
   cartItems: CartItem[];
-  addToCart: (product: Product) => void;
-  increaseQuantity: (productId: number) => void;
-  decreaseQuantity: (productId: number) => void;
-  removeFromCart: (productId: number) => void;
+  addToCart: (event: IEvent) => void;
+  increaseQuantity: (eventId: number) => void;
+  decreaseQuantity: (eventId: number) => void;
+  removeFromCart: (eventId: number) => void;
   clearCart: () => void;
   getTotal: () => number;
   getItemCount: () => number;
@@ -48,13 +48,13 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   }, [isLoggedIn]);
 
   //FUNCIONES
-  const addToCart = (product: Product) => {
+  const addToCart = (event: IEvent) => {
     if (!isLoggedIn) {
       toast.error("Debes estar logueado para agregar productos al carrito");
       return;
     }
 
-    const existingItem = cartItems.find(item => item.id === product.id);
+    const existingItem = cartItems.find(item => item.id === event.id);
 
     // Si el producto ya existe en el carrito
     if (existingItem) {
@@ -65,7 +65,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
       setCartItems(prev =>
         prev.map(item =>
-          item.id === product.id
+          item.id === event.id
             ? { ...item, quantity: item.quantity + 1 }
             : item
         )
@@ -76,7 +76,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     }
 
     // Si el producto no existe, se agrega con cantidad 1
-    setCartItems(prev => [...prev, { ...product, quantity: 1 }]);
+    setCartItems(prev => [...prev, { ...event, quantity: 1 }]);
     toast.success("Producto agregado al carrito");
   };
 

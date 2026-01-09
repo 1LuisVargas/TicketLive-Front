@@ -3,17 +3,19 @@ import { Calendar, MapPin, Ticket, User, Clock } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import IEvent from "@/interfaces/event.interface";
 import { useCart } from "@/contexts/CartContext";
-import { start } from "repl";
 
 export function EventCard({
+  id,
   title,
+  description,
   date,
+  start_time,
   location,
+  capacity,
   price,
   imageUrl,
+  status,
   category,
-  capacity,
-  start_time,
 }: IEvent) {
   const dateObj = new Date(date);
   const formattedDate = dateObj.toLocaleDateString("en-US", {
@@ -21,6 +23,8 @@ export function EventCard({
     month: "short",
     day: "numeric",
   });
+
+  const { addToCart } = useCart();
 
   return (
     <div className="group relative overflow-hidden rounded-3xl bg-secondary/30 border border-white/5 hover:border-sidebar-accent/50 transition-all duration-500 hover:shadow-[0_0_50px_-12px_rgba(139,92,246,0.2)]">
@@ -81,7 +85,7 @@ export function EventCard({
             </span>
             <span className="text-lg font-bold text-white">{price}$</span>
           </div>
-          <Button variant="ghost" size="sm" className="form-button">
+          <Button onClick={() => addToCart({ id, title, price, imageUrl, category, status, capacity, location, date, start_time, description })} variant="ghost" size="sm" className="form-button">
             Reservar ahora &rarr;
           </Button>
         </div>
