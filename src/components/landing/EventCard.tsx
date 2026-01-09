@@ -1,8 +1,9 @@
 import Image from "next/image";
-import { Calendar, MapPin, Ticket } from "lucide-react";
+import { Calendar, MapPin, Ticket, User, Clock } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import IEvent from "@/interfaces/event.interface";
 import { useCart } from "@/contexts/CartContext";
+import { start } from "repl";
 
 export function EventCard({
   title,
@@ -12,6 +13,7 @@ export function EventCard({
   imageUrl,
   category,
   capacity,
+  start_time,
 }: IEvent) {
   const dateObj = new Date(date);
   const formattedDate = dateObj.toLocaleDateString("en-US", {
@@ -53,14 +55,22 @@ export function EventCard({
           {title}
         </h3>
 
-        <div className="space-y-2">
-          <div className="flex items-center text-sm text-muted-foreground gap-2">
-            <Calendar className="h-4 w-4 text-primary" />
+        <div className="space-y-2 grid grid-cols-2">
+          <div className="event-details">
+            <Calendar className="event-icons" />
             <span>{formattedDate}</span>
           </div>
-          <div className="flex items-center text-sm text-muted-foreground gap-2">
-            <MapPin className="h-4 w-4 text-primary" />
+          <div className="event-details">
+            <MapPin className="event-icons" />
             <span>{location}</span>
+          </div>
+          <div className="event-details">
+            <User className="event-icons" />
+            <span>{capacity}</span>
+          </div>
+          <div className="event-details">
+            <Clock className="event-icons" />
+            <span>{start_time.split("T")[1].split(".")[0]}</span>
           </div>
         </div>
 

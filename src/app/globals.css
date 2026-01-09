@@ -1,6 +1,14 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+.event-details{
+  @apply flex items-center text-sm text-muted-foreground gap-2;
+}
+
+.event-icons{
+  @apply h-4 w-4 text-primary;
+}
+
 .form-div{
   @apply flex flex-col space-y-2 text-white;
 }
