@@ -9,5 +9,5 @@ export default interface IEvent {
   price: number;
   imageUrl: string;
   status: boolean;
-  category: string;
+  categoryId: string;
 }
