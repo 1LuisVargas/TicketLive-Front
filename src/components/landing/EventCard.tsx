@@ -1,9 +1,12 @@
+"use client";
+
 import Image from "next/image";
 import { Calendar, MapPin, Ticket, User, Clock } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import IEvent from "@/interfaces/event.interface";
 import { useCart } from "@/contexts/CartContext";
-import { useRouter } from "next/navigation"
+import { useRouter } from "next/navigation";
+import { dateFormatter } from "@/services/events.service";
 
 export function EventCard({
   id,
@@ -18,12 +21,7 @@ export function EventCard({
   status,
   categoryId,
 }: IEvent) {
-  const dateObj = new Date(date);
-  const formattedDate = dateObj.toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
+  const formattedDate = dateFormatter(date);
 
   const { addToCart } = useCart();
   const router = useRouter();
@@ -56,7 +54,7 @@ export function EventCard({
           {title}
         </h3>
 
-        <div className="space-y-2 grid grid-cols-2">
+        <div className="flex items-center gap-4">
           <div className="event-details">
             <Calendar className="event-icons" />
             <span>{formattedDate}</span>
@@ -66,19 +64,18 @@ export function EventCard({
             <span>{location}</span>
           </div>
           <div className="event-details">
-            <User className="event-icons" />
-            <span>{capacity}</span>
-          </div>
-          <div className="event-details">
             <Clock className="event-icons" />
             <span>{start_time.split("T")[1].split(":00.")[0]}</span>
-          </div>
-          <div>
-            <button className="primary" onClick={() => router.push(`/events/${id}`)}>View details</button>
           </div>
         </div>
 
         <div className="flex items-center justify-between pt-4 border-t border-white/5">
+          <Button
+            variant="primary"
+            onClick={() => router.push(`/events/${id}`)}
+          >
+            Ver detalles
+          </Button>
           <div className="flex flex-col">
             <span className="text-xs text-muted-foreground uppercase">
               Desde
