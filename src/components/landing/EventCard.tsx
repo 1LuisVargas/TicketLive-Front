@@ -1,8 +1,12 @@
+"use client";
+
 import Image from "next/image";
 import { Calendar, MapPin, Ticket, User, Clock } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import IEvent from "@/interfaces/event.interface";
 import { useCart } from "@/contexts/CartContext";
+import { useRouter } from "next/navigation";
+import { dateFormatter } from "@/services/events.service";
 
 export function EventCard({
   id,
@@ -15,33 +19,24 @@ export function EventCard({
   price,
   imageUrl,
   status,
-  category,
+  categoryId,
 }: IEvent) {
-  const dateObj = new Date(date);
-  const formattedDate = dateObj.toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
+  const formattedDate = dateFormatter(date);
 
   const { addToCart } = useCart();
+  const router = useRouter();
 
   return (
     <div className="group relative overflow-hidden rounded-3xl bg-secondary/30 border border-white/5 hover:border-sidebar-accent/50 transition-all duration-500 hover:shadow-[0_0_50px_-12px_rgba(139,92,246,0.2)]">
       {/* Image Container */}
       <div className="relative h-64 w-full overflow-hidden">
-        <div className="absolute top-4 left-4 z-10">
-          <span className="px-3 py-1 rounded-full bg-black/60 backdrop-blur-md text-white text-xs font-semibold border border-white/10 uppercase tracking-wider">
-            {category}
-          </span>
-        </div>
         <Image
           src={imageUrl}
           alt={title}
           fill
           className="object-cover transition-transform duration-700 group-hover:scale-110"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent opacity-80" />
+        <div className="absolute inset-0 bg-linear-to-t from-background via-background/20 to-transparent opacity-80" />
       </div>
 
       {/* Content */}
@@ -59,7 +54,7 @@ export function EventCard({
           {title}
         </h3>
 
-        <div className="space-y-2 grid grid-cols-2">
+        <div className="flex items-center gap-4">
           <div className="event-details">
             <Calendar className="event-icons" />
             <span>{formattedDate}</span>
@@ -69,23 +64,44 @@ export function EventCard({
             <span>{location}</span>
           </div>
           <div className="event-details">
-            <User className="event-icons" />
-            <span>{capacity}</span>
-          </div>
-          <div className="event-details">
             <Clock className="event-icons" />
-            <span>{start_time.split("T")[1].split(".")[0]}</span>
+            <span>{start_time.split("T")[1].split(":00.")[0]}</span>
           </div>
         </div>
 
         <div className="flex items-center justify-between pt-4 border-t border-white/5">
+          <Button
+            variant="primary"
+            onClick={() => router.push(`/events/${id}`)}
+          >
+            Ver detalles
+          </Button>
           <div className="flex flex-col">
             <span className="text-xs text-muted-foreground uppercase">
               Desde
             </span>
             <span className="text-lg font-bold text-white">{price}$</span>
           </div>
-          <Button onClick={() => addToCart({ id, title, price, imageUrl, category, status, capacity, location, date, start_time, description })} variant="ghost" size="sm" className="form-button">
+          <Button
+            onClick={() =>
+              addToCart({
+                id,
+                title,
+                price,
+                imageUrl,
+                categoryId,
+                status,
+                capacity,
+                location,
+                date,
+                start_time,
+                description,
+              })
+            }
+            variant="ghost"
+            size="sm"
+            className="form-button"
+          >
             Reservar ahora &rarr;
           </Button>
         </div>
