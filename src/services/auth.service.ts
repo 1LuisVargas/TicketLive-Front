@@ -1,23 +1,29 @@
 import { RegisterFormValuesType } from "@/validators/registerSchema";
 import { LoginFormValuesType } from "@/validators/loginSchema";
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL ; //|| "http://localhost:3001"
+export interface User {
+  id: string;
+  email: string;
+  name: string;
+  googleId?: string;
+  isAdmin: boolean;
+  phone?: string;
+  address?: string;
+  profile_photo?: string | null;
+  profile_photo_id?: string;
+  dni?: string;
+  birthday?: string;
+}
 
 export interface AuthResponse {
   success: boolean;
   message: string;
   token?: string;
-  user?: {
-    id: string;
-    email: string;
-    name: string;
-    role: string;
-  };
+  user?: User;
 }
 
-
-/**** */
 export class AuthError extends Error {
   status: number;
   constructor(message: string, status: number) {
@@ -26,15 +32,11 @@ export class AuthError extends Error {
     this.name = "AuthError";
   }
 }
-/**** */
-
-
 
 export interface ApiError {
   message: string;
   errors?: Record<string, string[]>;
 }
-
 
 export const registerUser = async (
   userData: RegisterFormValuesType
@@ -44,10 +46,9 @@ export const registerUser = async (
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(userData),
-      credentials: "include", 
+      credentials: "include",
     });
     const data = await response.json();
-
 
     if (!response.ok) {
       throw new Error(data?.message || "Error al registrar usuario");
@@ -61,7 +62,6 @@ export const registerUser = async (
   }
 };
 
-
 export const loginUser = async (
   userData: LoginFormValuesType
 ): Promise<AuthResponse> => {
@@ -72,7 +72,7 @@ export const loginUser = async (
         "Content-Type": "application/json",
       },
       body: JSON.stringify(userData),
-      credentials: "include", 
+      credentials: "include",
     });
     const data = await response.json();
 
@@ -89,21 +89,23 @@ export const loginUser = async (
   }
 };
 
-
-export const fetchUserProfile = async (): Promise<AuthResponse['user']> => {
+export const fetchUserProfile = async (): Promise<User | null> => {
   try {
     const response = await fetch(`${API_URL}/users/me`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
-      credentials: "include", 
+      credentials: "include",
     });
 
     const data = await response.json();
 
     if (!response.ok) {
-      throw new AuthError(data?.message || "Error al obtener perfil", response.status);
+      throw new AuthError(
+        data?.message || "Error al obtener perfil",
+        response.status
+      );
     }
 
     return data;
@@ -112,12 +114,10 @@ export const fetchUserProfile = async (): Promise<AuthResponse['user']> => {
   }
 };
 
-
 export const logoutUser = async (): Promise<void> => {
   try {
-    
     await fetch(`${API_URL}/auth/signout`, {
-      method: "POST", 
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
