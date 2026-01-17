@@ -1,14 +1,13 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/Button';
-// import { cn } from '@/utils/cn'; // Will use if needed
 
 export function Hero() {
   return (
     <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
-      {/* Background Gradient / Image Placeholder */}
+      {/* Degradado de fondo / Marcador de posición de imagen */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/20 via-background to-background z-0" />
       
-      {/* Animated blobs or effects */}
+      {/* Elementos animados o efectos */}
       <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/30 rounded-full blur-3xl opacity-20 animate-pulse" />
       <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-accent/30 rounded-full blur-3xl opacity-20 animate-pulse delay-1000" />
 
@@ -20,7 +19,7 @@ export function Hero() {
         </div>
         
         <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight mb-8 bg-gradient-to-br from-white via-white/90 to-white/50 bg-clip-text text-transparent drop-shadow-sm">
-          Vive lo <br /> 
+          Vivelo <br /> 
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">extraordinario</span>
         </h1>
         
@@ -29,15 +28,14 @@ export function Hero() {
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-           <Button size="lg" className="h-14 px-8 text-lg min-w-[200px]">
-             Explorar eventos
-           </Button>
-           <Button variant="outline" size="lg" className="h-14 px-8 text-lg min-w-[200px]">
-             Cómo funciona
-           </Button>
+           <Link href="/events">
+             <Button size="lg" className="h-14 px-8 text-lg min-w-[200px]">
+               Explorar eventos
+             </Button>
+           </Link>
         </div>
         
-        {/* Stats or Trusted By */}
+        {/* Estadísticas */}
         <div className="mt-20 pt-8 border-t border-white/5 grid grid-cols-2 md:grid-cols-4 gap-8">
             {[
                 { label: 'Usuarios activos', value: '2M+' },

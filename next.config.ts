@@ -15,19 +15,39 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
+        hostname: "images.mlssoccer.com",
+        pathname: "/**"
+      },
+      {
+        protocol: "https",
         hostname: "upload.wikimedia.org",
         pathname: "/**"
       },
       {
         protocol: "https",
-        hostname: "images.mlssoccer.com",
+        hostname: "www.billboard.com",
+        pathname: "/**"
+      },
+      {
+        protocol: "https",
+        hostname: "imagenes.elpais.com",
+        pathname: "/**"
+      },
+      {
+        protocol: "https",
+        hostname: "imagenes.heraldo.es",
         pathname: "/**"
       },
       {
         protocol: "https",
         hostname: "images.squarespace-cdn.com",
         pathname: "/**"
-      }
+      },
+      {
+        protocol: "https",
+        hostname: "festivalsherpa.com",
+        pathname: "/**"
+      },
     ],
   },
 };
