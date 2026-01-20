@@ -27,6 +27,7 @@ export function EventCard({
   description,
   date,
   start_time,
+  end_time,
   location,
   capacity,
   price,
@@ -129,6 +130,7 @@ export function EventCard({
                 location,
                 date,
                 start_time,
+                end_time,
                 description,
               })
             }
