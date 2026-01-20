@@ -1,13 +1,25 @@
 "use client";
 
 import Image from "next/image";
-import { Calendar, MapPin, Ticket, User, Clock } from "lucide-react";
+import { Calendar, MapPin, Ticket, Clock } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import IEvent from "@/interfaces/event.interface";
 import { useCart } from "@/contexts/CartContext";
 import { useRouter } from "next/navigation";
 import { dateFormatter } from "@/services/events.service";
-import FavoriteButton from "@/components/favorites/FavoriteButton"; // ⭐ AGREGADO
+import FavoriteButton from "@/components/favorites/FavoriteButton";
+
+//Interfaz local para FavoriteButton para que no se rompa TS
+interface FavoriteEvent {
+  id: string;
+  title: string;
+  description: string;
+  imageUrl: string;
+  price: number;
+  date: Date;
+  location: string;
+  category: number;
+}
 
 export function EventCard({
   id,
@@ -27,6 +39,18 @@ export function EventCard({
   const { addToCart } = useCart();
   const router = useRouter();
 
+  // Objeto adaptado solo para favoritos
+  const favoriteEvent: FavoriteEvent = {
+    id: id.toString(),
+    title,
+    description,
+    imageUrl,
+    price,
+    date,
+    location,
+    category: categoryId,
+  };
+
   return (
     <div className="group relative overflow-hidden rounded-3xl bg-secondary/30 border border-white/5 hover:border-sidebar-accent/50 transition-all duration-500 hover:shadow-[0_0_50px_-12px_rgba(139,92,246,0.2)]">
       {/* Image Container */}
@@ -38,22 +62,10 @@ export function EventCard({
           className="object-cover transition-transform duration-700 group-hover:scale-110"
         />
         <div className="absolute inset-0 bg-linear-to-t from-background via-background/20 to-transparent opacity-80" />
-        
-        {/* ⭐ BOTÓN DE FAVORITO - AGREGADO ⭐ */}
+
+        {/* Botón de favoritos */}
         <div className="absolute top-4 right-4 z-10">
-          <FavoriteButton 
-            event={{
-              id: id.toString(),
-              title,
-              description,
-              imageUrl,
-              price,
-              date,
-              location,
-              category: categoryId,
-            }} 
-            size="md" 
-          />
+          <FavoriteButton event={favoriteEvent} size="md" />
         </div>
       </div>
 
@@ -94,12 +106,16 @@ export function EventCard({
           >
             Ver detalles
           </Button>
+
           <div className="flex flex-col">
             <span className="text-xs text-muted-foreground uppercase">
               Desde
             </span>
-            <span className="text-lg font-bold text-white">{price}$</span>
+            <span className="text-lg font-bold text-white">
+              {price}$
+            </span>
           </div>
+
           <Button
             onClick={() =>
               addToCart({
