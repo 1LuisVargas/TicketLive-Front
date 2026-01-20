@@ -134,7 +134,6 @@ export default function CrearEventoPage() {
         status: true,  // ⭐ AGREGADO (evento activo por defecto)
       };
 
-
       const response = await fetch(`${API_URL}/events`, {
         method: "POST",
         headers: {
