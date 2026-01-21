@@ -47,7 +47,7 @@ export function EventCard({
     description,
     imageUrl,
     price,
-    date,
+    date: date instanceof Date ? date.toISOString() : date,
     location,
     category: categoryId,
   };
