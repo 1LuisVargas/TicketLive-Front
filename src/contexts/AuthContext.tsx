@@ -1,16 +1,25 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+} from "react";
 import { useRouter } from "next/navigation";
+
 import { User, AuthResponse } from "@/interfaces/user.interface";
 import { LoginFormValuesType } from "@/validators/loginSchema";
 import { RegisterFormValuesType } from "@/validators/registerSchema";
+
 import {
   loginUser,
   registerUser,
   fetchUserProfile,
   logoutUser,
 } from "@/services/auth.service";
+
 import {
   saveUserToLocalStorage,
   loadUserFromLocalStorage,
@@ -35,15 +44,15 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   /**
-   * Refresca el usuario desde el backend
+   * 🔄 Carga sesión (Google auth / reload)
    */
   const refreshUser = useCallback(async () => {
     try {
       setIsLoading(true);
-      
+
       const savedUser = loadUserFromLocalStorage();
       const userData = await fetchUserProfile();
 
@@ -56,127 +65,110 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           isAdmin: userData.isAdmin || false,
           phone: userData.phone,
           address: userData.address,
-          profile_photo: userData.profile_photo || savedUser?.profile_photo || null,
-          profile_photo_id: userData.profile_photo_id || savedUser?.profile_photo_id,
-          birthday: userData.birthday,
+          profile_photo:
+            userData.profile_photo ||
+            savedUser?.profile_photo ||
+            null,
+          profile_photo_id:
+            userData.profile_photo_id ||
+            savedUser?.profile_photo_id,
+          birthday: userData.birthday
+            ? new Date(userData.birthday)
+            : null,
         };
+
         setUser(fullUser);
         saveUserToLocalStorage(fullUser);
       } else {
-        if (savedUser) {
-          setUser(savedUser);
-        } else {
-          setUser(null);
-        }
+        setUser(savedUser ?? null);
       }
     } catch (error) {
       console.error("Error al refrescar usuario:", error);
-      const savedUser = loadUserFromLocalStorage();
-      if (savedUser) {
-        setUser(savedUser);
-      } else {
-        setUser(null);
-      }
+      setUser(loadUserFromLocalStorage() ?? null);
     } finally {
       setIsLoading(false);
     }
   }, []);
 
   /**
-   * Carga el usuario al montar el componente
+   * 🚀 Carga inicial desde localStorage
    */
   useEffect(() => {
     const savedUser = loadUserFromLocalStorage();
     if (savedUser) {
       setUser(savedUser);
-      setIsLoading(false);
     }
-    
-    // TEMPORALMENTE COMENTADO: El backend no guarda los cambios correctamente
-    // Descomentar cuando el backend esté arreglado
-    // refreshUser();
-    
     setIsLoading(false);
-  }, [refreshUser]);
+  }, []);
 
   /**
-   * Inicia sesión
+   * 🔐 LOGIN
    */
   const login = async (credentials: LoginFormValuesType) => {
     try {
       setIsLoading(true);
       const response: AuthResponse = await loginUser(credentials);
 
-      if (response.user) {
-        const fullUser: User = {
-          id: response.user.id,
-          email: response.user.email,
-          name: response.user.name,
-          googleId: response.user.googleId,
-          isAdmin: response.user.isAdmin || false,
-          phone: response.user.phone,
-          address: response.user.address,
-          profile_photo: response.user.profile_photo,
-          profile_photo_id: response.user.profile_photo_id,
-          birthday: response.user.birthday,
-        };
-        setUser(fullUser);
-        saveUserToLocalStorage(fullUser);
-        
-        // ⭐ AGREGAR: Guardar token en localStorage
-        if (response.token) {
-          localStorage.setItem("token", response.token);
-        }
+      if (!response.user) return;
+
+      const fullUser: User = {
+        id: response.user.id,
+        email: response.user.email,
+        name: response.user.name,
+        googleId: response.user.googleId,
+        isAdmin: response.user.isAdmin || false,
+        phone: response.user.phone,
+        address: response.user.address,
+        profile_photo: response.user.profile_photo,
+        profile_photo_id: response.user.profile_photo_id,
+        birthday: response.user.birthday
+          ? new Date(response.user.birthday)
+          : null,
+      };
+
+      setUser(fullUser);
+      saveUserToLocalStorage(fullUser);
+
+      if (response.token) {
+        localStorage.setItem("token", response.token);
       }
-    } catch (error) {
-      throw error;
     } finally {
       setIsLoading(false);
     }
   };
 
   /**
-   * Registra un nuevo usuario
+   * 📝 REGISTER (solo crea usuario)
    */
   const register = async (userData: RegisterFormValuesType) => {
     try {
       setIsLoading(true);
       await registerUser(userData);
-      await login({
-        email: userData.email,
-        password: userData.password,
-      });
-    } catch (error) {
-      throw error;
     } finally {
       setIsLoading(false);
     }
   };
 
   /**
-   * Cierra sesión
+   * 🚪 LOGOUT
    */
   const logout = async () => {
     await logoutUser();
     setUser(null);
     removeUserFromLocalStorage();
-    localStorage.removeItem("token"); // ⭐ AGREGAR: Eliminar token también
+    localStorage.removeItem("token");
     router.push("/login");
   };
 
   /**
-   * Actualiza los datos del usuario
+   * ✏️ Update local user
    */
   const updateUser = (updatedData: Partial<User>) => {
-    if (user) {
-      const updatedUser = { ...user, ...updatedData };
-      setUser(updatedUser);
-      saveUserToLocalStorage(updatedUser);
-      
-      if (typeof window !== 'undefined') {
-        window.dispatchEvent(new Event('userUpdated'));
-      }
-    }
+    if (!user) return;
+
+    const updatedUser = { ...user, ...updatedData };
+    setUser(updatedUser);
+    saveUserToLocalStorage(updatedUser);
   };
 
   const value: AuthContextType = {
@@ -192,16 +184,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     updateUser,
   };
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={value}>
+      {children}
+    </AuthContext.Provider>
+  );
 }
 
 /**
- * Hook para usar el contexto de autenticación
+ * 🪝 Hook
  */
 export function useAuth() {
   const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error("useAuth debe ser usado dentro de un AuthProvider");
+  if (!context) {
+    throw new Error("useAuth debe usarse dentro de AuthProvider");
   }
   return context;
 }
