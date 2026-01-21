@@ -43,6 +43,14 @@ export default function DashboardPage() {
   birthday: "",
   });
 
+  const formatBirthdayForInput = (birthday?: string | Date | null) => {
+  if (!birthday) return "";
+  const date = birthday instanceof Date ? birthday : new Date(birthday);
+  return isNaN(date.getTime())
+    ? ""
+    : date.toISOString().split("T")[0];
+  };
+
   // Redirect si no está autenticado
   useEffect(() => {
     if (!loading && !isAuthenticated) {
@@ -58,7 +66,7 @@ export default function DashboardPage() {
         email: user.email || "",
         phone: user.phone || "",
         address: user.address || "",
-        birthday: user.birthday ? user.birthday.toISOString().split("T")[0] : "",
+        birthday: formatBirthdayForInput(user.birthday),
       });
     }
   }, [user]);
@@ -400,7 +408,7 @@ export default function DashboardPage() {
                           email: user.email || "",
                           phone: user.phone || "",
                           address: user.address || "",
-                          birthday: user.birthday ? user.birthday.toISOString().split("T")[0] : "",
+                          birthday: formatBirthdayForInput(user.birthday),
                         });
                       }}
                       disabled={isSaving}
