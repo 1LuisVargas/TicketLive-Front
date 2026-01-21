@@ -8,7 +8,7 @@ export interface User {
   address?: string;
   profile_photo?: string | null;
   profile_photo_id?: string;
-  birthday?: string;
+  birthday?: Date | null;
 }
 
 export interface AuthResponse {
