@@ -1,6 +1,12 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+} from "react";
 import { useRouter } from "next/navigation";
 import { User, AuthResponse } from "@/interfaces/user.interface";
 import { LoginFormValuesType } from "@/validators/loginSchema";
@@ -35,15 +41,15 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   /**
-   * Refresca el usuario desde el backend
+   * 🔄 Refresca el usuario desde el backend
    */
   const refreshUser = useCallback(async () => {
     try {
       setIsLoading(true);
-      
+
       const savedUser = loadUserFromLocalStorage();
       const userData = await fetchUserProfile();
 
@@ -56,51 +62,45 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           isAdmin: userData.isAdmin || false,
           phone: userData.phone,
           address: userData.address,
-          profile_photo: userData.profile_photo || savedUser?.profile_photo || null,
-          profile_photo_id: userData.profile_photo_id || savedUser?.profile_photo_id,
+          profile_photo:
+            userData.profile_photo ||
+            savedUser?.profile_photo ||
+            null,
+          profile_photo_id:
+            userData.profile_photo_id ||
+            savedUser?.profile_photo_id,
           birthday: userData.birthday,
         };
+
         setUser(fullUser);
         saveUserToLocalStorage(fullUser);
       } else {
-        if (savedUser) {
-          setUser(savedUser);
-        } else {
-          setUser(null);
-        }
+        setUser(savedUser ?? null);
       }
     } catch (error) {
       console.error("Error al refrescar usuario:", error);
-      const savedUser = loadUserFromLocalStorage();
-      if (savedUser) {
-        setUser(savedUser);
-      } else {
-        setUser(null);
-      }
+      setUser(loadUserFromLocalStorage() ?? null);
     } finally {
       setIsLoading(false);
     }
   }, []);
 
   /**
-   * Carga el usuario al montar el componente
+   * 🚀 Carga inicial del usuario (solo desde localStorage)
    */
   useEffect(() => {
     const savedUser = loadUserFromLocalStorage();
     if (savedUser) {
       setUser(savedUser);
-      setIsLoading(false);
     }
-    
-    // TEMPORALMENTE COMENTADO: El backend no guarda los cambios correctamente
-    // Descomentar cuando el backend esté arreglado
-    // refreshUser();
-    
     setIsLoading(false);
+
+    // Cuando el backend esté estable:
+    // refreshUser();
   }, [refreshUser]);
 
   /**
-   * Inicia sesión
+   * 🔐 Login
    */
   const login = async (credentials: LoginFormValuesType) => {
     try {
@@ -120,62 +120,54 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           profile_photo_id: response.user.profile_photo_id,
           birthday: response.user.birthday,
         };
+
         setUser(fullUser);
         saveUserToLocalStorage(fullUser);
-        
-        // ⭐ AGREGAR: Guardar token en localStorage
+
         if (response.token) {
           localStorage.setItem("token", response.token);
         }
       }
-    } catch (error) {
-      throw error;
     } finally {
       setIsLoading(false);
     }
   };
 
   /**
-   * Registra un nuevo usuario
+   * 📝 Register (NO hace login automático)
    */
   const register = async (userData: RegisterFormValuesType) => {
     try {
       setIsLoading(true);
       await registerUser(userData);
-      await login({
-        email: userData.email,
-        password: userData.password,
-      });
-    } catch (error) {
-      throw error;
     } finally {
       setIsLoading(false);
     }
   };
 
   /**
-   * Cierra sesión
+   * 🚪 Logout
    */
   const logout = async () => {
     await logoutUser();
     setUser(null);
     removeUserFromLocalStorage();
-    localStorage.removeItem("token"); // ⭐ AGREGAR: Eliminar token también
+    localStorage.removeItem("token");
     router.push("/login");
   };
 
   /**
-   * Actualiza los datos del usuario
+   * ✏️ Actualiza los datos del usuario
    */
   const updateUser = (updatedData: Partial<User>) => {
-    if (user) {
-      const updatedUser = { ...user, ...updatedData };
-      setUser(updatedUser);
-      saveUserToLocalStorage(updatedUser);
-      
-      if (typeof window !== 'undefined') {
-        window.dispatchEvent(new Event('userUpdated'));
-      }
+    if (!user) return;
+
+    const updatedUser = { ...user, ...updatedData };
+    setUser(updatedUser);
+    saveUserToLocalStorage(updatedUser);
+
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(new Event("userUpdated"));
     }
   };
 
@@ -192,15 +184,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     updateUser,
   };
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={value}>
+      {children}
+    </AuthContext.Provider>
+  );
 }
 
 /**
- * Hook para usar el contexto de autenticación
+ * 🪝 Hook para usar el contexto de autenticación
  */
 export function useAuth() {
   const context = useContext(AuthContext);
-  if (context === undefined) {
+  if (!context) {
     throw new Error("useAuth debe ser usado dentro de un AuthProvider");
   }
   return context;
