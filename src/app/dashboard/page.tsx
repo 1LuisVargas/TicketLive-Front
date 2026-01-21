@@ -136,7 +136,10 @@ export default function DashboardPage() {
       }
 
       // Si todo es válido, guardar
-      await updateUserProfile(user.id, formData);
+      await updateUserProfile(user.id, {
+      ...formData,
+      birthday: formData.birthday || undefined,
+      });
       updateUser({
       ...formData,
       birthday: formData.birthday
