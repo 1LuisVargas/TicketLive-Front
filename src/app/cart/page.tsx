@@ -105,13 +105,13 @@ export default function CartPage() {
                   className="grid grid-cols-1 md:grid-cols-12 gap-6 px-6 py-6 items-center"
                 >
                   <div className="md:col-span-8 flex gap-4 items-center">
-                    <div className="relative w-40 h-24 rounded-xl overflow-hidden bg-secondary">
+                    <div className="relative w-32 h-20 md:w-40 md:h-24 flex-shrink-0 rounded-xl overflow-hidden bg-secondary">
                       <Image
                         src={item.event.imageUrl}
                         alt={item.event.title}
                         fill
                         className="object-cover"
-                        sizes="160px"
+                        sizes="(max-width: 768px) 128px, 160px"
                       />
                     </div>
 
