@@ -76,7 +76,7 @@ export const registerUser = async (userData: RegisterFormValuesType): Promise<Au
  */
 export const fetchUserProfile = async (): Promise<User | null> => {
   try {
-    const response = await fetch(`${API_URL}/users/me`, {
+    const response = await fetch(`${API_URL}/auth/me`, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
