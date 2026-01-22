@@ -28,10 +28,12 @@ export default function AdminEventosPage() {
   const fetchEvents = async () => {
     try {
       const response = await fetch(`${API_URL}/events?page=1&limit=1000`,
-      {
-        credentials: "include",
+        {
+          credentials: "include",
+        });
+      if (!response.ok) {
+        throw new Error("Failed to fetch events");
       }
-    );
       const data = await response.json();
       setEvents(data);
     } catch (error) {
@@ -167,11 +169,10 @@ export default function AdminEventosPage() {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span
-                            className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                              event.status
+                            className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${event.status
                                 ? "bg-green-900/30 text-green-400"
                                 : "bg-red-900/30 text-red-400"
-                            }`}
+                              }`}
                           >
                             {event.status ? "Activo" : "Inactivo"}
                           </span>
