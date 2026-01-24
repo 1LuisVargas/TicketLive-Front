@@ -1,3 +1,72 @@
+// import IEvent from "@/interfaces/event.interface";
+
+// export interface ICategory {
+//   id: string;
+//   name: string;
+// }
+
+// export const getEvents = async (): Promise<IEvent[]> => {
+//   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/events?page=1&limit=1000`, {
+//     method: "GET",
+//     headers: {
+//       "Content-Type": "application/json",
+//     },
+//   });
+
+//   if (!res.ok) {
+//     throw new Error("Failed to fetch events");
+//   }
+
+//   return res.json();
+// };
+
+// export const getEvent = async (id: string): Promise<IEvent> => {
+//   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/events/${id}`, {
+//     method: "GET",
+//     headers: {
+//       "Content-Type": "application/json",
+//     },
+//   });
+
+//   if (!res.ok) {
+//     throw new Error("Failed to fetch event");
+//   }
+
+//   return res.json();
+// }
+
+// export const getEventCategories = async (): Promise<ICategory[]> => {
+//   const res = await fetch (`${process.env.NEXT_PUBLIC_API_URL}/categories`, {
+//     method: "GET",
+//     headers: {
+//       "Content-Type": "application/json",
+//     },
+//   });
+
+//     if (!res.ok) {
+//       throw new Error("Failed to fetch categories");
+//     }
+
+//     return res.json();
+// }
+
+// export const dateFormatter = (date: Date) => {
+//   const dateObj = new Date(date);
+//   return dateObj.toLocaleDateString("es-CO", {
+//     year: "numeric",
+//     month: "short",
+//     day: "numeric",
+//   });
+// } 
+
+// export const timeFormatter = (startTime: string) => {
+//   const dateObj = new Date(startTime);
+//   return dateObj.toLocaleTimeString("es-CO", {
+//     hour: "numeric",
+//     minute: "numeric",
+//   });
+// }
+
 import IEvent from "@/interfaces/event.interface";
 
 export interface ICategory {
@@ -6,7 +75,7 @@ export interface ICategory {
 }
 
 export const getEvents = async (): Promise<IEvent[]> => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/events?page=1&limit=1000`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/events`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -36,18 +105,18 @@ export const getEvent = async (id: string): Promise<IEvent> => {
 }
 
 export const getEventCategories = async (): Promise<ICategory[]> => {
-  const res = await fetch (`${process.env.NEXT_PUBLIC_API_URL}/categories`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/categories`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
     },
   });
 
-    if (!res.ok) {
-      throw new Error("Failed to fetch categories");
-    }
+  if (!res.ok) {
+    throw new Error("Failed to fetch categories");
+  }
 
-    return res.json();
+  return res.json();
 }
 
 export const dateFormatter = (date: Date) => {
@@ -57,7 +126,7 @@ export const dateFormatter = (date: Date) => {
     month: "short",
     day: "numeric",
   });
-} 
+}
 
 export const timeFormatter = (startTime: string) => {
   const dateObj = new Date(startTime);
