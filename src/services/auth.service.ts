@@ -20,7 +20,9 @@ export class AuthError extends Error {
 /**
  * Inicia sesión con credenciales
  */
-export const loginUser = async (credentials: LoginFormValuesType): Promise<AuthResponse> => {
+export const loginUser = async (
+  credentials: LoginFormValuesType,
+): Promise<AuthResponse> => {
   try {
     const response = await fetch(`${API_URL}/auth/signin`, {
       method: "POST",
@@ -28,13 +30,13 @@ export const loginUser = async (credentials: LoginFormValuesType): Promise<AuthR
       body: JSON.stringify(credentials),
       credentials: "include",
     });
-    
+
     const data = await response.json();
-    
+
     if (!response.ok) {
       throw new Error(data?.message || "Error al iniciar sesión");
     }
-    
+
     return data;
   } catch (error) {
     if (error instanceof Error) {
@@ -47,7 +49,9 @@ export const loginUser = async (credentials: LoginFormValuesType): Promise<AuthR
 /**
  * Registra un nuevo usuario
  */
-export const registerUser = async (userData: RegisterFormValuesType): Promise<AuthResponse> => {
+export const registerUser = async (
+  userData: RegisterFormValuesType,
+): Promise<AuthResponse> => {
   try {
     const response = await fetch(`${API_URL}/auth/signup`, {
       method: "POST",
@@ -55,13 +59,13 @@ export const registerUser = async (userData: RegisterFormValuesType): Promise<Au
       body: JSON.stringify(userData),
       credentials: "include",
     });
-    
+
     const data = await response.json();
-    
+
     if (!response.ok) {
       throw new Error(data?.message || "Error al registrar usuario");
     }
-    
+
     return data;
   } catch (error) {
     if (error instanceof Error) {
@@ -86,11 +90,11 @@ export const fetchUserProfile = async (): Promise<User | null> => {
       if (response.status === 401) {
         return null;
       }
-      
+
       const data = await response.json();
       throw new AuthError(
         data?.message || "Error al obtener perfil",
-        response.status
+        response.status,
       );
     }
 
@@ -109,9 +113,8 @@ export const fetchUserProfile = async (): Promise<User | null> => {
  */
 export const logoutUser = async (): Promise<void> => {
   try {
-    await fetch(`${API_URL}/auth/signout`, {
+    await fetch(`${API_URL}/auth/signout/api`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
       credentials: "include",
     });
   } catch (error) {
@@ -124,7 +127,7 @@ export const logoutUser = async (): Promise<void> => {
  */
 export const updateUserProfile = async (
   userId: string,
-  userData: UpdateUserProfileDto
+  userData: UpdateUserProfileDto,
 ): Promise<User> => {
   const response = await fetch(`${API_URL}/users/${userId}`, {
     method: "PATCH",
@@ -147,16 +150,19 @@ export const updateUserProfile = async (
  */
 export const uploadProfileImage = async (
   userId: string,
-  file: File
+  file: File,
 ): Promise<string> => {
   const formData = new FormData();
   formData.append("file", file);
 
-  const response = await fetch(`${API_URL}/file-upload/profileImage/${userId}`, {
-    method: "POST",
-    body: formData,
-    credentials: "include",
-  });
+  const response = await fetch(
+    `${API_URL}/file-upload/profileImage/${userId}`,
+    {
+      method: "POST",
+      body: formData,
+      credentials: "include",
+    },
+  );
 
   if (!response.ok) {
     throw new Error("Error al subir la imagen");
