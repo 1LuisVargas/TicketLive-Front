@@ -157,9 +157,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
    */
   const logout = async () => {
     await logoutUser();
-    setUser(null);
-    removeUserFromLocalStorage();
-    localStorage.removeItem("token");
     router.push("/login");
   };
 
