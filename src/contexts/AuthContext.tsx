@@ -45,6 +45,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
   /**
    * 🔄 Carga sesión (Google auth / reload)
@@ -66,15 +67,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           phone: userData.phone,
           address: userData.address,
           profile_photo:
-            userData.profile_photo ||
-            savedUser?.profile_photo ||
-            null,
+            userData.profile_photo || savedUser?.profile_photo || null,
           profile_photo_id:
-            userData.profile_photo_id ||
-            savedUser?.profile_photo_id,
-          birthday: userData.birthday
-            ? new Date(userData.birthday)
-            : null,
+            userData.profile_photo_id || savedUser?.profile_photo_id,
+          birthday: userData.birthday ? new Date(userData.birthday) : null,
         };
 
         setUser(fullUser);
@@ -157,6 +153,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
    */
   const logout = async () => {
     await logoutUser();
+    setUser(null);
+    setIsAuthenticated(false);
     removeUserFromLocalStorage();
     router.push("/login");
   };
@@ -185,11 +183,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     updateUser,
   };
 
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
 /**
