@@ -4,6 +4,8 @@ import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import Image from "next/image";
+import { useCart } from "@/contexts/CartContext";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -13,10 +15,10 @@ export default function Navbar() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchValue, setSearchValue] = useState(searchParams.get("q") ?? "");
   const searchInputRef = useRef<HTMLInputElement | null>(null);
+  const cart = useCart();
 
   // Keep local input synced with URL (back button, manual URL edits, etc.)
   useEffect(() => {
@@ -28,16 +30,15 @@ export default function Navbar() {
     if (isSearchOpen) searchInputRef.current?.focus();
   }, [isSearchOpen]);
 
-const pushSearchToUrl = (nextValue: string) => {
-  const params = new URLSearchParams(searchParams.toString());
+  const pushSearchToUrl = (nextValue: string) => {
+    const params = new URLSearchParams(searchParams.toString());
 
-  if (!nextValue) params.delete("q");
-  else params.set("q", nextValue);
+    if (!nextValue) params.delete("q");
+    else params.set("q", nextValue);
 
-  const qs = params.toString();
-  router.push(qs ? `/events?${qs}` : "/events");
-};
-
+    const qs = params.toString();
+    router.push(qs ? `/events?${qs}` : "/events");
+  };
 
   const clearSearch = () => {
     setSearchValue("");
@@ -159,7 +160,7 @@ const pushSearchToUrl = (nextValue: string) => {
               href="/cart"
               className="relative text-gray-300 hover:text-white font-medium transition-colors duration-200"
             >
-              🛒
+              🛒 <span>{cart.getItemCount()}</span>
             </Link>
           </div>
 
@@ -234,9 +235,11 @@ const pushSearchToUrl = (nextValue: string) => {
                     className="flex items-center gap-2 hover:opacity-80 transition-opacity"
                   >
                     {user.profile_photo ? (
-                      <img
+                      <Image
                         src={user.profile_photo}
                         alt={user.name || "Usuario"}
+                        width={36}
+                        height={36}
                         className="w-9 h-9 rounded-full object-cover border-2 border-purple-500/50"
                       />
                     ) : (
@@ -268,7 +271,7 @@ const pushSearchToUrl = (nextValue: string) => {
 
                   {/* Dropdown Menu */}
                   {isUserMenuOpen && (
-                    <div className="absolute right-0 mt-2 w-56 bg-zinc-800 rounded-lg shadow-xl py-2 border border-purple-500/20 animate-in fade-in slide-in-from-top-2 duration-200">
+                    <div className="absolute right-0 mt-2 w-56 bg-zinc-800 rounded-lg shadow-xl border border-purple-500/20 animate-in fade-in slide-in-from-top-2 duration-200">
                       {/* User Info */}
                       <div className="px-4 py-3 border-b border-zinc-700">
                         <p className="text-sm font-medium text-white">
@@ -308,9 +311,24 @@ const pushSearchToUrl = (nextValue: string) => {
                           className="flex items-center gap-3 px-4 py-2 text-sm text-purple-400 hover:bg-zinc-700 hover:text-purple-300 transition-colors"
                           onClick={() => setIsUserMenuOpen(false)}
                         >
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                          <svg
+                            className="w-4 h-4"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+                            />
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                            />
                           </svg>
                           Panel de Admin
                         </Link>
@@ -358,7 +376,7 @@ const pushSearchToUrl = (nextValue: string) => {
                         Favoritos
                       </Link>
 
-                      <div className="border-t border-zinc-700 my-2"></div>
+                      <div className="border-t border-zinc-700"></div>
 
                       <button
                         onClick={handleLogout}
@@ -477,7 +495,7 @@ const pushSearchToUrl = (nextValue: string) => {
               className="block text-gray-300 hover:text-white hover:bg-zinc-700 hover:bg-opacity-50 px-3 py-2 rounded-lg font-medium transition-colors"
               onClick={() => setIsMenuOpen(false)}
             >
-              🛒 Carrito
+              🛒 {cart.getItemCount()}
             </Link>
 
             {/* Auth Section Mobile */}
