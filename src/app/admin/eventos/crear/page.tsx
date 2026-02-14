@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import ImageUpload from "@/components/imageUpload/ImageUpload";
 import AdminGuard from "@/components/guards/AdminGuard";
+import { BackButton } from "@/components/ui/BackButton";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 
@@ -56,7 +57,7 @@ export default function CrearEventoPage() {
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
+    >,
   ) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -210,29 +211,11 @@ export default function CrearEventoPage() {
 
   return (
     <AdminGuard>
-      <div className="min-h-screen bg-gradient-to-b from-zinc-900 to-black py-8 px-4">
+      <div className="min-h-screen bg-linear-to-b from-zinc-900 to-black py-8 px-4">
         <div className="max-w-4xl mx-auto">
           {/* Header */}
           <div className="mb-8">
-            <button
-              onClick={() => router.back()}
-              className="mb-4 text-gray-400 hover:text-white flex items-center gap-2 transition-colors"
-            >
-              <svg
-                className="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 19l-7-7 7-7"
-                />
-              </svg>
-              Volver
-            </button>
+            <BackButton text="Volver al panel de administración" />
             <h1 className="text-4xl font-bold text-white mb-2">
               Crear Nuevo Evento
             </h1>
@@ -467,7 +450,7 @@ export default function CrearEventoPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="flex-1 px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-lg transition-colors font-bold disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex-1 px-6 py-3 bg-linear-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-lg transition-colors font-bold disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? (
                   <span className="flex items-center justify-center gap-2">

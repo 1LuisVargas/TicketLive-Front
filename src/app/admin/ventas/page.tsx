@@ -1,10 +1,8 @@
 "use client";
 
 import AdminGuard from "@/components/guards/AdminGuard";
-import Link from "next/link";
 import { useState, useEffect } from "react";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
+import { BackButton } from "@/components/ui/BackButton";
 
 interface Order {
   id: string;
@@ -29,21 +27,17 @@ export default function AdminVentasPage() {
 
   return (
     <AdminGuard>
-      <div className="min-h-screen bg-gradient-to-b from-zinc-900 to-black py-8 px-4">
+      <div className="min-h-screen bg-linear-to-b from-zinc-900 to-black py-8 px-4">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <div className="mb-8">
-            <Link
-              href="/admin"
-              className="text-purple-400 hover:text-purple-300 mb-2 inline-flex items-center gap-2"
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-              </svg>
-              Volver al Panel
-            </Link>
-            <h1 className="text-4xl font-bold text-white">Historial de Ventas</h1>
-            <p className="text-gray-400 mt-2">Todas las órdenes procesadas en la plataforma</p>
+            <BackButton text="Volver al panel de administración" />
+            <h1 className="text-4xl font-bold text-white">
+              Historial de Ventas
+            </h1>
+            <p className="text-gray-400 mt-2">
+              Todas las órdenes procesadas en la plataforma
+            </p>
           </div>
 
           {/* Orders Table */}
@@ -54,9 +48,7 @@ export default function AdminVentasPage() {
               </div>
             ) : orders.length === 0 ? (
               <div className="p-12 text-center">
-                <p className="text-gray-400">
-                  No hay ventas registradas aún
-                </p>
+                <p className="text-gray-400">No hay ventas registradas aún</p>
               </div>
             ) : (
               <div className="overflow-x-auto">
@@ -82,15 +74,22 @@ export default function AdminVentasPage() {
                   </thead>
                   <tbody className="divide-y divide-zinc-700">
                     {orders.map((order) => (
-                      <tr key={order.id} className="hover:bg-zinc-800/30 transition-colors">
+                      <tr
+                        key={order.id}
+                        className="hover:bg-zinc-800/30 transition-colors"
+                      >
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="text-sm font-mono text-gray-400">
                             {order.id.slice(0, 8)}...
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm font-medium text-white">{order.user.name}</div>
-                          <div className="text-sm text-gray-400">{order.user.email}</div>
+                          <div className="text-sm font-medium text-white">
+                            {order.user.name}
+                          </div>
+                          <div className="text-sm text-gray-400">
+                            {order.user.email}
+                          </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-white font-semibold">
                           ${order.total.toFixed(2)}
@@ -104,8 +103,8 @@ export default function AdminVentasPage() {
                               order.status === "PAID"
                                 ? "bg-green-900/30 text-green-400"
                                 : order.status === "PENDING"
-                                ? "bg-yellow-900/30 text-yellow-400"
-                                : "bg-red-900/30 text-red-400"
+                                  ? "bg-yellow-900/30 text-yellow-400"
+                                  : "bg-red-900/30 text-red-400"
                             }`}
                           >
                             {order.status}

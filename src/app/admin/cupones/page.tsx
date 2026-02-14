@@ -1,14 +1,24 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Plus, Trash2, Edit, X, Tag, TrendingDown, Loader2, AlertTriangle } from "lucide-react";
+import {
+  Plus,
+  Trash2,
+  Edit,
+  X,
+  Tag,
+  TrendingDown,
+  Loader2,
+  AlertTriangle,
+} from "lucide-react";
+import { BackButton } from "@/components/ui/BackButton";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 
 interface Coupon {
   id: string;
   code: string;
-  type: 'PERCENT' | 'FIXED';
+  type: "PERCENT" | "FIXED";
   value: number;
   isActive: boolean;
   maxRedemptions: number;
@@ -20,7 +30,7 @@ interface Coupon {
 
 interface CouponFormData {
   code: string;
-  type: 'PERCENT' | 'FIXED';
+  type: "PERCENT" | "FIXED";
   value: number;
   maxRedemptions: number;
   isActive: boolean;
@@ -34,8 +44,8 @@ export default function AdminCuponesPage() {
   const [couponToDelete, setCouponToDelete] = useState<Coupon | null>(null);
   const [editingCoupon, setEditingCoupon] = useState<Coupon | null>(null);
   const [formData, setFormData] = useState<CouponFormData>({
-    code: '',
-    type: 'PERCENT',
+    code: "",
+    type: "PERCENT",
     value: 0,
     maxRedemptions: 10,
     isActive: true,
@@ -51,7 +61,7 @@ export default function AdminCuponesPage() {
     try {
       setLoading(true);
       const response = await fetch(`${API_URL}/coupons`, {
-        credentials: 'include',
+        credentials: "include",
       });
 
       if (response.ok) {
@@ -59,17 +69,20 @@ export default function AdminCuponesPage() {
         setCoupons(data);
       }
     } catch (err) {
-      console.error('Error loading coupons:', err);
+      console.error("Error loading coupons:", err);
       showToast("Error al cargar cupones", "error");
     } finally {
       setLoading(false);
     }
   };
 
-  const showToast = (message: string, type: "success" | "error" = "success") => {
-    const toast = document.createElement('div');
+  const showToast = (
+    message: string,
+    type: "success" | "error" = "success",
+  ) => {
+    const toast = document.createElement("div");
     toast.className = `fixed top-4 right-4 px-6 py-3 rounded-lg shadow-lg z-50 ${
-      type === 'success' ? 'bg-green-600' : 'bg-red-600'
+      type === "success" ? "bg-green-600" : "bg-red-600"
     } text-white`;
     toast.textContent = message;
     document.body.appendChild(toast);
@@ -79,8 +92,8 @@ export default function AdminCuponesPage() {
   const openCreateModal = () => {
     setEditingCoupon(null);
     setFormData({
-      code: '',
-      type: 'PERCENT',
+      code: "",
+      type: "PERCENT",
       value: 0,
       maxRedemptions: 10,
       isActive: true,
@@ -124,28 +137,31 @@ export default function AdminCuponesPage() {
         ? `${API_URL}/coupons/${editingCoupon.id}`
         : `${API_URL}/coupons`;
 
-      const method = editingCoupon ? 'PATCH' : 'POST';
+      const method = editingCoupon ? "PATCH" : "POST";
 
       const response = await fetch(url, {
         method,
-        credentials: 'include',
+        credentials: "include",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
       });
 
       if (response.ok) {
-        showToast(editingCoupon ? 'Cupón actualizado' : 'Cupón creado', 'success');
+        showToast(
+          editingCoupon ? "Cupón actualizado" : "Cupón creado",
+          "success",
+        );
         closeModal();
         loadCoupons();
       } else {
         const error = await response.json();
-        showToast(error.message || 'Error al guardar cupón', 'error');
+        showToast(error.message || "Error al guardar cupón", "error");
       }
     } catch (err) {
-      console.error('Error saving coupon:', err);
-      showToast('Error al guardar cupón', 'error');
+      console.error("Error saving coupon:", err);
+      showToast("Error al guardar cupón", "error");
     } finally {
       setSubmitting(false);
     }
@@ -157,21 +173,21 @@ export default function AdminCuponesPage() {
     setDeleting(true);
     try {
       const response = await fetch(`${API_URL}/coupons/${couponToDelete.id}`, {
-        method: 'DELETE',
-        credentials: 'include',
+        method: "DELETE",
+        credentials: "include",
       });
 
       if (response.ok) {
-        showToast('Cupón eliminado correctamente', 'success');
+        showToast("Cupón eliminado correctamente", "success");
         closeDeleteModal();
         loadCoupons();
       } else {
         const error = await response.json();
-        showToast(error.message || 'Error al eliminar cupón', 'error');
+        showToast(error.message || "Error al eliminar cupón", "error");
       }
     } catch (err) {
-      console.error('Error deleting coupon:', err);
-      showToast('Error al eliminar cupón', 'error');
+      console.error("Error deleting coupon:", err);
+      showToast("Error al eliminar cupón", "error");
     } finally {
       setDeleting(false);
     }
@@ -180,10 +196,10 @@ export default function AdminCuponesPage() {
   const handleToggleActive = async (coupon: Coupon) => {
     try {
       const response = await fetch(`${API_URL}/coupons/${coupon.id}`, {
-        method: 'PATCH',
-        credentials: 'include',
+        method: "PATCH",
+        credentials: "include",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           isActive: !coupon.isActive,
@@ -191,23 +207,27 @@ export default function AdminCuponesPage() {
       });
 
       if (response.ok) {
-        showToast(coupon.isActive ? 'Cupón desactivado' : 'Cupón activado', 'success');
+        showToast(
+          coupon.isActive ? "Cupón desactivado" : "Cupón activado",
+          "success",
+        );
         loadCoupons();
       } else {
         const error = await response.json();
-        showToast(error.message || 'Error al cambiar estado', 'error');
+        showToast(error.message || "Error al cambiar estado", "error");
       }
     } catch (err) {
-      console.error('Error toggling active:', err);
-      showToast('Error al cambiar estado', 'error');
+      console.error("Error toggling active:", err);
+      showToast("Error al cambiar estado", "error");
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-zinc-900 to-black px-4 py-16">
+    <div className="min-h-screen bg-linear-to-b from-zinc-900 to-black px-4 py-16">
       <div className="max-w-7xl mx-auto">
         <div className="flex items-center justify-between mb-8">
           <div>
+            <BackButton text="Volver al panel de administración" />
             <h1 className="text-4xl font-bold text-white mb-2">
               Administración de Cupones
             </h1>
@@ -217,7 +237,7 @@ export default function AdminCuponesPage() {
           </div>
           <button
             onClick={openCreateModal}
-            className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-lg font-medium transition-all shadow-lg"
+            className="flex items-center gap-2 px-6 py-3 bg-linear-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-lg font-medium transition-all shadow-lg"
           >
             <Plus className="w-5 h-5" />
             Crear Cupón
@@ -232,13 +252,13 @@ export default function AdminCuponesPage() {
           <div className="bg-zinc-800/50 rounded-xl p-6 border border-green-500/20">
             <p className="text-gray-400 text-sm mb-1">Activos</p>
             <p className="text-3xl font-bold text-green-400">
-              {coupons.filter(c => c.isActive).length}
+              {coupons.filter((c) => c.isActive).length}
             </p>
           </div>
           <div className="bg-zinc-800/50 rounded-xl p-6 border border-red-500/20">
             <p className="text-gray-400 text-sm mb-1">Inactivos</p>
             <p className="text-3xl font-bold text-red-400">
-              {coupons.filter(c => !c.isActive).length}
+              {coupons.filter((c) => !c.isActive).length}
             </p>
           </div>
         </div>
@@ -264,49 +284,70 @@ export default function AdminCuponesPage() {
               <table className="w-full">
                 <thead>
                   <tr className="border-b border-zinc-700">
-                    <th className="px-6 py-4 text-left text-sm font-medium text-gray-400">Código</th>
-                    <th className="px-6 py-4 text-left text-sm font-medium text-gray-400">Tipo</th>
-                    <th className="px-6 py-4 text-left text-sm font-medium text-gray-400">Valor</th>
-                    <th className="px-6 py-4 text-left text-sm font-medium text-gray-400">Límite</th>
-                    <th className="px-6 py-4 text-left text-sm font-medium text-gray-400">Estado</th>
-                    <th className="px-6 py-4 text-right text-sm font-medium text-gray-400">Acciones</th>
+                    <th className="px-6 py-4 text-left text-sm font-medium text-gray-400">
+                      Código
+                    </th>
+                    <th className="px-6 py-4 text-left text-sm font-medium text-gray-400">
+                      Tipo
+                    </th>
+                    <th className="px-6 py-4 text-left text-sm font-medium text-gray-400">
+                      Valor
+                    </th>
+                    <th className="px-6 py-4 text-left text-sm font-medium text-gray-400">
+                      Límite
+                    </th>
+                    <th className="px-6 py-4 text-left text-sm font-medium text-gray-400">
+                      Estado
+                    </th>
+                    <th className="px-6 py-4 text-right text-sm font-medium text-gray-400">
+                      Acciones
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-zinc-700">
                   {coupons.map((coupon) => (
-                    <tr key={coupon.id} className="hover:bg-zinc-700/50 transition-colors">
+                    <tr
+                      key={coupon.id}
+                      className="hover:bg-zinc-700/50 transition-colors"
+                    >
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-2">
                           <Tag className="w-4 h-4 text-purple-400" />
-                          <span className="font-mono font-bold text-white">{coupon.code}</span>
+                          <span className="font-mono font-bold text-white">
+                            {coupon.code}
+                          </span>
                         </div>
                       </td>
                       <td className="px-6 py-4">
                         <span className="text-sm text-gray-300">
-                          {coupon.type === 'PERCENT' ? 'Porcentaje' : 'Fijo'}
+                          {coupon.type === "PERCENT" ? "Porcentaje" : "Fijo"}
                         </span>
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-1">
                           <TrendingDown className="w-4 h-4 text-green-400" />
                           <span className="font-bold text-white">
-                            {coupon.type === 'PERCENT' ? `${coupon.value}%` : `$${coupon.value}`}
+                            {coupon.type === "PERCENT"
+                              ? `${coupon.value}%`
+                              : `$${coupon.value}`}
                           </span>
                         </div>
                       </td>
                       <td className="px-6 py-4">
-                        <span className="text-sm text-gray-300">{coupon.maxRedemptions} usos</span>
+                        <span className="text-sm text-gray-300">
+                          {coupon.maxRedemptions} usos
+                        </span>
                       </td>
                       <td className="px-6 py-4">
                         <button
                           onClick={() => handleToggleActive(coupon)}
                           className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
                             coupon.isActive
-                              ? 'bg-green-500/20 text-green-400 hover:bg-green-500/30'
-                              : 'bg-red-500/20 text-red-400 hover:bg-red-500/30'
+                              ? "bg-green-500/20 text-green-400 hover:bg-green-500/30"
+                              : "bg-red-500/20 text-red-400 hover:bg-red-500/30"
                           }`}
                         >
-                          {coupon.isActive ? 'Activo' : 'Inactivo'}
+                          {coupon.isActive ? "Activo" : "Inactivo"}
                         </button>
                       </td>
                       <td className="px-6 py-4">
@@ -342,30 +383,47 @@ export default function AdminCuponesPage() {
           <div className="bg-zinc-900 rounded-2xl max-w-md w-full border border-zinc-700">
             <div className="flex items-center justify-between p-6 border-b border-zinc-700">
               <h2 className="text-xl font-bold text-white">
-                {editingCoupon ? 'Editar Cupón' : 'Crear Nuevo Cupón'}
+                {editingCoupon ? "Editar Cupón" : "Crear Nuevo Cupón"}
               </h2>
-              <button onClick={closeModal} className="text-gray-400 hover:text-white transition-colors">
+              <button
+                onClick={closeModal}
+                className="text-gray-400 hover:text-white transition-colors"
+              >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             <div className="p-6 space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">Código del Cupón</label>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Código del Cupón
+                </label>
                 <input
                   type="text"
                   value={formData.code}
-                  onChange={(e) => setFormData({ ...formData, code: e.target.value.toUpperCase() })}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      code: e.target.value.toUpperCase(),
+                    })
+                  }
                   className="w-full px-4 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white focus:outline-none focus:border-purple-500"
                   placeholder="VERANO2026"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">Tipo de Descuento</label>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Tipo de Descuento
+                </label>
                 <select
                   value={formData.type}
-                  onChange={(e) => setFormData({ ...formData, type: e.target.value as 'PERCENT' | 'FIXED' })}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      type: e.target.value as "PERCENT" | "FIXED",
+                    })
+                  }
                   className="w-full px-4 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white focus:outline-none focus:border-purple-500"
                 >
                   <option value="PERCENT">Porcentaje (%)</option>
@@ -375,24 +433,36 @@ export default function AdminCuponesPage() {
 
               <div>
                 <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Valor {formData.type === 'PERCENT' ? '(%)' : '($)'}
+                  Valor {formData.type === "PERCENT" ? "(%)" : "($)"}
                 </label>
                 <input
                   type="number"
                   value={formData.value}
-                  onChange={(e) => setFormData({ ...formData, value: parseInt(e.target.value) || 0 })}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      value: parseInt(e.target.value) || 0,
+                    })
+                  }
                   className="w-full px-4 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white focus:outline-none focus:border-purple-500"
                   min="1"
-                  max={formData.type === 'PERCENT' ? 100 : undefined}
+                  max={formData.type === "PERCENT" ? 100 : undefined}
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">Límite de Usos</label>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Límite de Usos
+                </label>
                 <input
                   type="number"
                   value={formData.maxRedemptions}
-                  onChange={(e) => setFormData({ ...formData, maxRedemptions: parseInt(e.target.value) || 10 })}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      maxRedemptions: parseInt(e.target.value) || 10,
+                    })
+                  }
                   className="w-full px-4 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white focus:outline-none focus:border-purple-500"
                   min="1"
                 />
@@ -403,10 +473,14 @@ export default function AdminCuponesPage() {
                   type="checkbox"
                   id="isActive"
                   checked={formData.isActive}
-                  onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, isActive: e.target.checked })
+                  }
                   className="w-4 h-4 rounded border-zinc-700 bg-zinc-800 text-purple-600"
                 />
-                <label htmlFor="isActive" className="text-sm text-gray-300">Cupón activo</label>
+                <label htmlFor="isActive" className="text-sm text-gray-300">
+                  Cupón activo
+                </label>
               </div>
 
               <div className="flex gap-3 pt-4">
@@ -421,15 +495,17 @@ export default function AdminCuponesPage() {
                   type="button"
                   onClick={handleSubmit}
                   disabled={submitting}
-                  className="flex-1 px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-lg transition-all disabled:opacity-50"
+                  className="flex-1 px-4 py-2 bg-linear-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-lg transition-all disabled:opacity-50"
                 >
                   {submitting ? (
                     <span className="flex items-center justify-center gap-2">
                       <Loader2 className="w-4 h-4 animate-spin" />
                       Guardando...
                     </span>
+                  ) : editingCoupon ? (
+                    "Actualizar"
                   ) : (
-                    editingCoupon ? 'Actualizar' : 'Crear Cupón'
+                    "Crear Cupón"
                   )}
                 </button>
               </div>
@@ -447,8 +523,12 @@ export default function AdminCuponesPage() {
                 <AlertTriangle className="w-6 h-6 text-red-400" />
               </div>
               <div>
-                <h2 className="text-xl font-bold text-white">¿Eliminar cupón?</h2>
-                <p className="text-sm text-gray-400 mt-1">Esta acción no se puede deshacer</p>
+                <h2 className="text-xl font-bold text-white">
+                  ¿Eliminar cupón?
+                </h2>
+                <p className="text-sm text-gray-400 mt-1">
+                  Esta acción no se puede deshacer
+                </p>
               </div>
             </div>
 
@@ -456,32 +536,36 @@ export default function AdminCuponesPage() {
               <div className="bg-zinc-800/50 rounded-lg p-4 mb-6">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-sm text-gray-400">Código:</span>
-                  <span className="font-mono font-bold text-white">{couponToDelete.code}</span>
+                  <span className="font-mono font-bold text-white">
+                    {couponToDelete.code}
+                  </span>
                 </div>
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-sm text-gray-400">Descuento:</span>
                   <span className="font-bold text-purple-400">
-                    {couponToDelete.type === 'PERCENT' 
-                      ? `${couponToDelete.value}%` 
-                      : `$${couponToDelete.value}`
-                    }
+                    {couponToDelete.type === "PERCENT"
+                      ? `${couponToDelete.value}%`
+                      : `$${couponToDelete.value}`}
                   </span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-gray-400">Estado:</span>
-                  <span className={`px-2 py-1 rounded text-xs font-medium ${
-                    couponToDelete.isActive
-                      ? 'bg-green-500/20 text-green-400'
-                      : 'bg-red-500/20 text-red-400'
-                  }`}>
-                    {couponToDelete.isActive ? 'Activo' : 'Inactivo'}
+                  <span
+                    className={`px-2 py-1 rounded text-xs font-medium ${
+                      couponToDelete.isActive
+                        ? "bg-green-500/20 text-green-400"
+                        : "bg-red-500/20 text-red-400"
+                    }`}
+                  >
+                    {couponToDelete.isActive ? "Activo" : "Inactivo"}
                   </span>
                 </div>
               </div>
 
               <p className="text-sm text-gray-400 mb-6">
-                Al eliminar este cupón, los usuarios ya no podrán utilizarlo. 
-                Si prefieres mantener el historial, considera desactivarlo en su lugar.
+                Al eliminar este cupón, los usuarios ya no podrán utilizarlo. Si
+                prefieres mantener el historial, considera desactivarlo en su
+                lugar.
               </p>
 
               <div className="flex gap-3">
@@ -505,7 +589,7 @@ export default function AdminCuponesPage() {
                       Eliminando...
                     </span>
                   ) : (
-                    'Eliminar cupón'
+                    "Eliminar cupón"
                   )}
                 </button>
               </div>

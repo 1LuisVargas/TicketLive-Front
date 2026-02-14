@@ -3,6 +3,7 @@
 import AdminGuard from "@/components/guards/AdminGuard";
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { BackButton } from "@/components/ui/BackButton";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 
@@ -46,8 +47,10 @@ export default function UsuariosPage() {
   const fetchUsers = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`${API_URL}/users?page=${currentPage}&limit=50`);
-      
+      const response = await fetch(
+        `${API_URL}/users?page=${currentPage}&limit=50`,
+      );
+
       if (!response.ok) {
         throw new Error(`Error ${response.status}: ${response.statusText}`);
       }
@@ -65,7 +68,11 @@ export default function UsuariosPage() {
 
   const handleAction = (type: ActionType, user: User) => {
     if (type === "delete" && user.isAdmin) {
-      if (!confirm(`⚠️ ADVERTENCIA: ESTE ES UN ADMINISTRADOR\n\n¿Estás SEGURO de que quieres eliminar al admin "${user.name}"?\n\nEsto puede causar problemas si es el único admin del sistema.\n\n¿Continuar de todas formas?`)) {
+      if (
+        !confirm(
+          `⚠️ ADVERTENCIA: ESTE ES UN ADMINISTRADOR\n\n¿Estás SEGURO de que quieres eliminar al admin "${user.name}"?\n\nEsto puede causar problemas si es el único admin del sistema.\n\n¿Continuar de todas formas?`,
+        )
+      ) {
         return;
       }
     }
@@ -91,7 +98,9 @@ export default function UsuariosPage() {
         case "ban":
           endpoint = `${API_URL}/users/${actionModal.user.id}/ban`;
           method = "PATCH";
-          body = JSON.stringify({ reason: banReason || "Sin razón especificada" });
+          body = JSON.stringify({
+            reason: banReason || "Sin razón especificada",
+          });
           break;
         case "unban":
           endpoint = `${API_URL}/users/${actionModal.user.id}/unban`;
@@ -150,7 +159,9 @@ export default function UsuariosPage() {
         return {
           icon: isAdminDelete ? "⚠️" : "🗑️",
           color: "red",
-          title: isAdminDelete ? "⚠️ ELIMINAR ADMINISTRADOR" : "¿Eliminar Usuario?",
+          title: isAdminDelete
+            ? "⚠️ ELIMINAR ADMINISTRADOR"
+            : "¿Eliminar Usuario?",
           message: (
             <>
               {isAdminDelete && (
@@ -161,17 +172,22 @@ export default function UsuariosPage() {
                 </div>
               )}
               Estás a punto de eliminar permanentemente a{" "}
-              <span className="font-semibold text-white">{actionModal.user.name}</span>
-              {" "}({actionModal.user.email}).
+              <span className="font-semibold text-white">
+                {actionModal.user.name}
+              </span>{" "}
+              ({actionModal.user.email}).
               {isAdminDelete && (
                 <>
-                  <br /><br />
+                  <br />
+                  <br />
                   <span className="text-yellow-400 font-medium">
-                    Si es el único admin, perderás acceso al panel de administración.
+                    Si es el único admin, perderás acceso al panel de
+                    administración.
                   </span>
                 </>
               )}
-              <br /><br />
+              <br />
+              <br />
               <span className="text-red-400 font-medium">
                 Esta acción NO se puede deshacer. Se perderán todos sus datos.
               </span>
@@ -188,9 +204,12 @@ export default function UsuariosPage() {
           message: (
             <>
               Vas a banear a{" "}
-              <span className="font-semibold text-white">{actionModal.user.name}</span>
-              {" "}({actionModal.user.email}).
-              <br /><br />
+              <span className="font-semibold text-white">
+                {actionModal.user.name}
+              </span>{" "}
+              ({actionModal.user.email}).
+              <br />
+              <br />
               El usuario no podrá:
               <ul className="list-disc list-inside mt-2 text-sm">
                 <li>Acceder a su perfil</li>
@@ -210,8 +229,12 @@ export default function UsuariosPage() {
           message: (
             <>
               Vas a desbanear a{" "}
-              <span className="font-semibold text-white">{actionModal.user.name}</span>.
-              <br /><br />
+              <span className="font-semibold text-white">
+                {actionModal.user.name}
+              </span>
+              .
+              <br />
+              <br />
               El usuario recuperará el acceso completo a la plataforma.
             </>
           ),
@@ -225,28 +248,34 @@ export default function UsuariosPage() {
 
   return (
     <AdminGuard>
-      <div className="min-h-screen bg-gradient-to-b from-zinc-900 to-black py-8 px-4">
-        <div className="max-w-[1600px] mx-auto">
+      <div className="min-h-screen bg-linear-to-b from-zinc-900 to-black py-8 px-4">
+        <div className="max-w-400 mx-auto">
           {/* Header */}
           <div className="mb-8">
-            <Link
-              href="/admin"
-              className="text-purple-400 hover:text-purple-300 mb-2 inline-flex items-center gap-2"
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-              </svg>
-              Volver al Dashboard
-            </Link>
-            <h1 className="text-4xl font-bold text-white">Usuarios Registrados</h1>
-            <p className="text-gray-400 mt-2">Total: {users.length} usuarios en esta página</p>
+            <BackButton text="Volver al panel de administración" />
+            <h1 className="text-4xl font-bold text-white">
+              Usuarios Registrados
+            </h1>
+            <p className="text-gray-400 mt-2">
+              Total: {users.length} usuarios en esta página
+            </p>
           </div>
 
           {/* Success Message */}
           {successMessage && (
             <div className="bg-green-500/10 border border-green-500 rounded-lg p-4 mb-6 flex items-center gap-3">
-              <svg className="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              <svg
+                className="w-5 h-5 text-green-500"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M5 13l4 4L19 7"
+                />
               </svg>
               <p className="text-green-400">✅ {successMessage}</p>
             </div>
@@ -271,25 +300,25 @@ export default function UsuariosPage() {
           {!loading && !error && users.length > 0 && (
             <div className="bg-zinc-800/50 border border-zinc-700 rounded-xl overflow-hidden">
               <div className="overflow-x-auto">
-                <table className="w-full min-w-[1200px]">
+                <table className="w-full min-w-300">
                   <thead className="bg-zinc-700/50">
                     <tr>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider w-[250px]">
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider w-40">
                         Usuario
                       </th>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider w-[220px]">
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider w-55">
                         Email
                       </th>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider w-[160px]">
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider w-40">
                         Estado
                       </th>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider w-[130px]">
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider w-32.5">
                         Teléfono
                       </th>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider w-[130px]">
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider w-32.5">
                         Registro
                       </th>
-                      <th className="px-4 py-3 text-right text-xs font-medium text-gray-300 uppercase tracking-wider w-[260px]">
+                      <th className="px-4 py-3 text-right text-xs font-medium text-gray-300 uppercase tracking-wider w-65">
                         Acciones
                       </th>
                     </tr>
@@ -299,12 +328,17 @@ export default function UsuariosPage() {
                       const isBanned = !user.isActive;
 
                       return (
-                        <tr key={user.id} className="hover:bg-zinc-700/30 transition-colors">
+                        <tr
+                          key={user.id}
+                          className="hover:bg-zinc-700/30 transition-colors"
+                        >
                           {/* Usuario */}
                           <td className="px-4 py-3 whitespace-nowrap">
                             <div className="flex items-center gap-3">
-                              <div className="flex-shrink-0 h-10 w-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white font-semibold text-sm">
-                                {user.name ? user.name.charAt(0).toUpperCase() : "?"}
+                              <div className="shrink-0 h-10 w-10 bg-linear-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white font-semibold text-sm">
+                                {user.name
+                                  ? user.name.charAt(0).toUpperCase()
+                                  : "?"}
                               </div>
                               <div className="min-w-0 flex-1">
                                 <div className="text-sm font-medium text-white truncate">
@@ -326,7 +360,10 @@ export default function UsuariosPage() {
 
                           {/* Email */}
                           <td className="px-4 py-3 whitespace-nowrap">
-                            <div className="text-sm text-gray-300 truncate max-w-[200px]" title={user.email}>
+                            <div
+                              className="text-sm text-gray-300 truncate max-w-50"
+                              title={user.email}
+                            >
                               {user.email}
                             </div>
                           </td>
@@ -347,7 +384,9 @@ export default function UsuariosPage() {
                               {isBanned && (
                                 <span
                                   className="px-2 py-1 inline-flex text-xs leading-4 font-semibold rounded-full bg-red-500/20 text-red-400 border border-red-500/50 w-fit cursor-help"
-                                  title={user.banReason || "Sin razón especificada"}
+                                  title={
+                                    user.banReason || "Sin razón especificada"
+                                  }
                                 >
                                   🚫 Baneado
                                 </span>
@@ -359,7 +398,9 @@ export default function UsuariosPage() {
                           <td className="px-4 py-3 whitespace-nowrap">
                             <div className="text-sm text-gray-300">
                               {user.phone || (
-                                <span className="text-gray-500 italic text-xs">Sin teléfono</span>
+                                <span className="text-gray-500 italic text-xs">
+                                  Sin teléfono
+                                </span>
                               )}
                             </div>
                           </td>
@@ -381,8 +422,18 @@ export default function UsuariosPage() {
                                   className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-green-500/10 hover:bg-green-500/20 text-green-400 border border-green-500/50 rounded-lg transition-colors text-sm whitespace-nowrap"
                                   title="Desbanear usuario"
                                 >
-                                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                  <svg
+                                    className="w-3.5 h-3.5"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth={2}
+                                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                                    />
                                   </svg>
                                   <span>Desbanear</span>
                                 </button>
@@ -392,8 +443,18 @@ export default function UsuariosPage() {
                                   className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-orange-500/10 hover:bg-orange-500/20 text-orange-400 border border-orange-500/50 rounded-lg transition-colors text-sm whitespace-nowrap"
                                   title="Banear usuario"
                                 >
-                                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+                                  <svg
+                                    className="w-3.5 h-3.5"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth={2}
+                                      d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"
+                                    />
                                   </svg>
                                   <span>Banear</span>
                                 </button>
@@ -407,13 +468,29 @@ export default function UsuariosPage() {
                                     ? "bg-yellow-500/10 hover:bg-yellow-500/20 text-yellow-400 border-yellow-500/50"
                                     : "bg-red-500/10 hover:bg-red-500/20 text-red-400 border-red-500/50"
                                 }`}
-                                title={user.isAdmin ? "⚠️ Eliminar administrador" : "Eliminar usuario"}
+                                title={
+                                  user.isAdmin
+                                    ? "⚠️ Eliminar administrador"
+                                    : "Eliminar usuario"
+                                }
                               >
-                                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                <svg
+                                  className="w-3.5 h-3.5"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  viewBox="0 0 24 24"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                                  />
                                 </svg>
                                 {/* Texto siempre visible */}
-                                <span>{user.isAdmin ? "⚠️ Eliminar" : "Eliminar"}</span>
+                                <span>
+                                  {user.isAdmin ? "⚠️ Eliminar" : "Eliminar"}
+                                </span>
                               </button>
                             </div>
                           </td>
@@ -423,7 +500,7 @@ export default function UsuariosPage() {
                   </tbody>
                 </table>
               </div>
-              
+
               <div className="sm:hidden bg-zinc-700/30 px-4 py-2 text-center text-xs text-gray-400">
                 ← Desliza para ver más →
               </div>
@@ -446,11 +523,15 @@ export default function UsuariosPage() {
         <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 px-4">
           <div className="bg-zinc-800 border border-zinc-700 rounded-xl p-6 max-w-md w-full">
             <div className="flex items-center justify-center mb-4">
-              <div className={`p-3 rounded-full ${
-                modalContent.color === "red" ? "bg-red-500/10" :
-                modalContent.color === "orange" ? "bg-orange-500/10" :
-                "bg-green-500/10"
-              }`}>
+              <div
+                className={`p-3 rounded-full ${
+                  modalContent.color === "red"
+                    ? "bg-red-500/10"
+                    : modalContent.color === "orange"
+                      ? "bg-orange-500/10"
+                      : "bg-green-500/10"
+                }`}
+              >
                 <span className="text-4xl">{modalContent.icon}</span>
               </div>
             </div>
@@ -480,7 +561,9 @@ export default function UsuariosPage() {
 
             <div className="flex gap-3">
               <button
-                onClick={() => setActionModal({ show: false, type: null, user: null })}
+                onClick={() =>
+                  setActionModal({ show: false, type: null, user: null })
+                }
                 disabled={processing}
                 className="flex-1 px-4 py-2 bg-zinc-700 hover:bg-zinc-600 text-white rounded-lg transition-colors disabled:opacity-50"
               >
@@ -490,9 +573,11 @@ export default function UsuariosPage() {
                 onClick={handleConfirmAction}
                 disabled={processing}
                 className={`flex-1 px-4 py-2 text-white rounded-lg font-medium transition-colors disabled:opacity-50 flex items-center justify-center gap-2 ${
-                  modalContent.color === "red" ? "bg-red-600 hover:bg-red-700" :
-                  modalContent.color === "orange" ? "bg-orange-600 hover:bg-orange-700" :
-                  "bg-green-600 hover:bg-green-700"
+                  modalContent.color === "red"
+                    ? "bg-red-600 hover:bg-red-700"
+                    : modalContent.color === "orange"
+                      ? "bg-orange-600 hover:bg-orange-700"
+                      : "bg-green-600 hover:bg-green-700"
                 }`}
               >
                 {processing ? (

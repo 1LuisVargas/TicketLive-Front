@@ -1,10 +1,8 @@
 "use client";
 
 import AdminGuard from "@/components/guards/AdminGuard";
-import Link from "next/link";
 import { useState, useEffect } from "react";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
+import { BackButton } from "@/components/ui/BackButton";
 
 interface Category {
   id: string;
@@ -37,8 +35,10 @@ export default function CategoriasPage() {
   const fetchCategories = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`${API_URL}/categories`);
-      
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/categories`,
+      );
+
       if (!response.ok) {
         throw new Error(`Error ${response.status}: ${response.statusText}`);
       }
@@ -61,7 +61,10 @@ export default function CategoriasPage() {
 
   const handleConfirmAction = async () => {
     if (!actionModal.type) return;
-    if ((actionModal.type === "create" || actionModal.type === "edit") && !categoryName.trim()) {
+    if (
+      (actionModal.type === "create" || actionModal.type === "edit") &&
+      !categoryName.trim()
+    ) {
       alert("El nombre de la categoría no puede estar vacío");
       return;
     }
@@ -106,15 +109,19 @@ export default function CategoriasPage() {
       }
 
       await fetchCategories();
-      
-      const actionText = 
-        actionModal.type === "create" ? "creada" :
-        actionModal.type === "edit" ? "editada" :
-        "eliminada";
-      
-      setSuccessMessage(`Categoría "${categoryName || actionModal.category?.name}" ${actionText}`);
+
+      const actionText =
+        actionModal.type === "create"
+          ? "creada"
+          : actionModal.type === "edit"
+            ? "editada"
+            : "eliminada";
+
+      setSuccessMessage(
+        `Categoría "${categoryName || actionModal.category?.name}" ${actionText}`,
+      );
       setTimeout(() => setSuccessMessage(null), 3000);
-      
+
       setActionModal({ show: false, type: null, category: null });
       setCategoryName("");
     } catch (err: any) {
@@ -151,8 +158,12 @@ export default function CategoriasPage() {
           message: (
             <>
               ¿Estás seguro de que quieres eliminar la categoría{" "}
-              <span className="font-semibold text-white">"{actionModal.category?.name}"</span>?
-              <br /><br />
+              <span className="font-semibold text-white">
+                "{actionModal.category?.name}"
+              </span>
+              ?
+              <br />
+              <br />
               <span className="text-yellow-400 font-medium">
                 ⚠️ Si hay eventos en esta categoría, puede causar errores.
               </span>
@@ -170,30 +181,34 @@ export default function CategoriasPage() {
 
   return (
     <AdminGuard>
-      <div className="min-h-screen bg-gradient-to-b from-zinc-900 to-black py-8 px-4">
+      <div className="min-h-screen bg-linear-to-b from-zinc-900 to-black py-8 px-4">
         <div className="max-w-4xl mx-auto">
           {/* Header */}
           <div className="mb-8">
-            <Link
-              href="/admin"
-              className="text-purple-400 hover:text-purple-300 mb-2 inline-flex items-center gap-2"
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-              </svg>
-              Volver al Dashboard
-            </Link>
+            <BackButton text="Volver al panel de administración" />
             <div className="flex items-center justify-between">
               <div>
                 <h1 className="text-4xl font-bold text-white">Categorías</h1>
-                <p className="text-gray-400 mt-2">Total: {categories.length} categorías</p>
+                <p className="text-gray-400 mt-2">
+                  Total: {categories.length} categorías
+                </p>
               </div>
               <button
                 onClick={() => handleAction("create")}
                 className="inline-flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors font-medium"
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 4v16m8-8H4"
+                  />
                 </svg>
                 Nueva Categoría
               </button>
@@ -203,8 +218,18 @@ export default function CategoriasPage() {
           {/* Success Message */}
           {successMessage && (
             <div className="bg-green-500/10 border border-green-500 rounded-lg p-4 mb-6 flex items-center gap-3">
-              <svg className="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              <svg
+                className="w-5 h-5 text-green-500"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M5 13l4 4L19 7"
+                />
               </svg>
               <p className="text-green-400">✅ {successMessage}</p>
             </div>
@@ -235,7 +260,7 @@ export default function CategoriasPage() {
                 >
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
+                      <div className="w-10 h-10 bg-linear-to-br from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
                         <span className="text-xl">🏷️</span>
                       </div>
                       <h3 className="text-lg font-semibold text-white">
@@ -243,14 +268,24 @@ export default function CategoriasPage() {
                       </h3>
                     </div>
                   </div>
-                  
+
                   <div className="flex gap-2">
                     <button
                       onClick={() => handleAction("edit", category)}
                       className="flex-1 inline-flex items-center justify-center gap-2 px-3 py-2 bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 border border-blue-500/50 rounded-lg transition-colors text-sm"
                     >
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                      <svg
+                        className="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                        />
                       </svg>
                       Editar
                     </button>
@@ -258,8 +293,18 @@ export default function CategoriasPage() {
                       onClick={() => handleAction("delete", category)}
                       className="flex-1 inline-flex items-center justify-center gap-2 px-3 py-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/50 rounded-lg transition-colors text-sm"
                     >
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                      <svg
+                        className="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                        />
                       </svg>
                       Eliminar
                     </button>
@@ -279,8 +324,18 @@ export default function CategoriasPage() {
                 onClick={() => handleAction("create")}
                 className="inline-flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors font-medium"
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 4v16m8-8H4"
+                  />
                 </svg>
                 Crear Primera Categoría
               </button>
@@ -294,11 +349,15 @@ export default function CategoriasPage() {
         <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 px-4">
           <div className="bg-zinc-800 border border-zinc-700 rounded-xl p-6 max-w-md w-full">
             <div className="flex items-center justify-center mb-4">
-              <div className={`p-3 rounded-full ${
-                modalContent.color === "red" ? "bg-red-500/10" :
-                modalContent.color === "blue" ? "bg-blue-500/10" :
-                "bg-green-500/10"
-              }`}>
+              <div
+                className={`p-3 rounded-full ${
+                  modalContent.color === "red"
+                    ? "bg-red-500/10"
+                    : modalContent.color === "blue"
+                      ? "bg-blue-500/10"
+                      : "bg-green-500/10"
+                }`}
+              >
                 <span className="text-4xl">{modalContent.icon}</span>
               </div>
             </div>
@@ -348,9 +407,11 @@ export default function CategoriasPage() {
                 onClick={handleConfirmAction}
                 disabled={processing}
                 className={`flex-1 px-4 py-2 text-white rounded-lg font-medium transition-colors disabled:opacity-50 flex items-center justify-center gap-2 ${
-                  modalContent.color === "red" ? "bg-red-600 hover:bg-red-700" :
-                  modalContent.color === "blue" ? "bg-blue-600 hover:bg-blue-700" :
-                  "bg-green-600 hover:bg-green-700"
+                  modalContent.color === "red"
+                    ? "bg-red-600 hover:bg-red-700"
+                    : modalContent.color === "blue"
+                      ? "bg-blue-600 hover:bg-blue-700"
+                      : "bg-green-600 hover:bg-green-700"
                 }`}
               >
                 {processing ? (
