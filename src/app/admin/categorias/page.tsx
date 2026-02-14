@@ -77,19 +77,19 @@ export default function CategoriasPage() {
 
       switch (actionModal.type) {
         case "create":
-          endpoint = `${API_URL}/categories`;
+          endpoint = `${process.env.NEXT_PUBLIC_API_URL}/categories`;
           method = "POST";
           body = JSON.stringify({ name: categoryName.trim() });
           break;
         case "edit":
           if (!actionModal.category) return;
-          endpoint = `${API_URL}/categories/${actionModal.category.id}`;
+          endpoint = `${process.env.NEXT_PUBLIC_API_URL}/categories/${actionModal.category.id}`;
           method = "PATCH";
           body = JSON.stringify({ name: categoryName.trim() });
           break;
         case "delete":
           if (!actionModal.category) return;
-          endpoint = `${API_URL}/categories/${actionModal.category.id}`;
+          endpoint = `${process.env.NEXT_PUBLIC_API_URL}/categories/${actionModal.category.id}`;
           method = "DELETE";
           break;
       }
