@@ -188,8 +188,17 @@ npm start       # Start the production server locally
 
 ---
 
-## 👤 Author
+## 👤 Authors
 
 **Luis Vargas**
 - GitHub: [@1LuisVargas](https://github.com/1LuisVargas)
 - LinkedIn: [@1LuisVargas](https://www.linkedin.com/in/1luisvargas/)
+
+**Fabrizio Pascual**
+- GitHub: [@Fabrizio-Pascual](https://github.com/Fabrizio-Pascual)
+
+**Lenoardo Sadoux**
+- GitHub: [@LSadoux](https://github.com/LSadoux)
+
+**Day Torres**
+- GitHub: [@day2555](https://github.com/day2555)
