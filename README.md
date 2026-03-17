@@ -1,4 +1,4 @@
-# 🎟️ TicketLive — Frontend
+# 🎟️ [TicketLive — Frontend](https://ticket-live-front.vercel.app)
 
 > A frontend application built with **Next.js** and **TypeScript** that serves as the user interface for **TicketLive**, an event ticketing platform. Built with modern React practices, a scalable architecture, and configured for deployment on Vercel.
 
@@ -173,7 +173,7 @@ The app will be available at `http://localhost:3005`.
 
 ## 🔌 API
 
-For available API endpoints, refer to the [TicketLive-Back](https://github.com/1LuisVargas/TicketLive-Back) repository.
+For available API endpoints, refer to the [TicketLive-Back](https://github.com/1LuisVargas/TicketLive-Back) repository or directly into the [swagger documentation](https://ticketlive-back.onrender.com/api).
 
 ---
 
