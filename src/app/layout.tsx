@@ -11,6 +11,10 @@ import { Toaster } from "sonner";
 import { ChatBot } from "@/components/ui/ChatBot";
 import { Suspense } from "react";
 
+{/* Vercel Analytics */}
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
+
 const inter = Inter({
   variable: "--font-sans",
   subsets: ["latin"],
@@ -18,7 +22,8 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: "TicketLive - Premium Concert Tickets",
-  description: "Secure tickets for the best live events, concerts, and festivals.",
+  description:
+    "Secure tickets for the best live events, concerts, and festivals.",
 };
 
 export default function RootLayout({
@@ -38,6 +43,8 @@ export default function RootLayout({
                 <Suspense fallback={null}>
                   <Navbar />
                   {children}
+                  <Analytics />
+                  <SpeedInsights />
                   <Footer />
                   <Toaster position="top-right" richColors />
                 </Suspense>
