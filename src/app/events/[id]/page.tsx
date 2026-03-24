@@ -10,7 +10,6 @@ import AddToCartButton from "@/components/ui/AddToCart";
 import EventMap from "@/components/maps/EventMap";
 import { geocodeMapTiler } from "@/services/geocode.service";
 import { BackButton } from "@/components/ui/BackButton";
-import Link from "next/link";
 
 export default async function EventDetails({
   params,
@@ -26,7 +25,7 @@ export default async function EventDetails({
 
   return (
     <section className="min-h-screen px-4 md:px-6 py-10">
-      <BackButton text="Volver al panel de administración" />
+      <BackButton text="Volver a todos los eventos" />
       <div className="max-w-6xl mx-auto space-y-10">
         {/* ================= HERO ================= */}
         <div className="relative overflow-hidden rounded-3xl ring-1 ring-white/10 shadow-2xl shadow-black/40">
