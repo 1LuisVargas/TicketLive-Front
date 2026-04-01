@@ -37,11 +37,14 @@
 | Framework    | Next.js (App Router), React, TypeScript         |
 | Styling      | Tailwind CSS, PostCSS                           |
 | State        | React Context API                               |
-| Validation   | Custom validators                               |
+| Validation   | Yup                                             |
 | Payments     | MercadoPago                                     |
 | Maps         | MapTiler                                        |
 | AI Chatbot   | Groq                                            |
-| Deployment   | Vercel                                          |
+| Frontend     | Vercel                                          |
+| Backend      | Render                                          |
+| Database     | Supabase (PostgreSQL)                           |
+| Monitoring   | UptimeRobot                                     |
 
 ---
 
