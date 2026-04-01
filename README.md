@@ -32,19 +32,16 @@
 
 ## 🛠️ Tech Stack
 
-| Layer        | Technology                                      |
-|--------------|-------------------------------------------------|
-| Framework    | Next.js (App Router), React, TypeScript         |
-| Styling      | Tailwind CSS, PostCSS                           |
-| State        | React Context API                               |
-| Validation   | Yup                                             |
-| Payments     | MercadoPago                                     |
-| Maps         | MapTiler                                        |
-| AI Chatbot   | Groq                                            |
-| Frontend     | Vercel                                          |
-| Backend      | Render                                          |
-| Database     | Supabase (PostgreSQL)                           |
-| Monitoring   | UptimeRobot                                     |
+| Layer        | Technology                              |
+|--------------|-----------------------------------------|
+| Framework    | Next.js (App Router), React, TypeScript |
+| Styling      | Tailwind CSS, PostCSS                   |
+| State        | React Context API                       |
+| Validation   | Yup validators                          |
+| Payments     | MercadoPago                             |
+| Maps         | MapTiler                                |
+| AI Chatbot   | Groq                                    |
+| Deployment   | Vercel                                  |
 
 ---
 
