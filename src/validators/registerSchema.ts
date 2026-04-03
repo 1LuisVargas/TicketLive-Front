@@ -33,7 +33,7 @@ export const registerValidationSchema = Yup.object({
     .matches(/[A-Z]/, 'La contraseña debe contener al menos una mayúscula')
     .matches(/[0-9]/, 'La contraseña debe contener al menos un número')
     .matches(/[!@#$%^&*]/, 'La contraseña debe contener al menos un símbolo (!@#$%^&*)')
-    .required('La contraseña es requerida'),
+    .required('La contraseña es obligatoria'),
   confirmPassword: Yup.string()
     .oneOf([Yup.ref('password')], 'Las contraseñas deben coincidir')
     .required('Por favor confirma tu contraseña'),
