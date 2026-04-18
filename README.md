@@ -32,16 +32,17 @@
 
 ## 🛠️ Tech Stack
 
-| Layer        | Technology                              |
-|--------------|-----------------------------------------|
-| Framework    | Next.js (App Router), React, TypeScript |
-| Styling      | Tailwind CSS, PostCSS                   |
-| State        | React Context API                       |
-| Validation   | Yup validators                          |
-| Payments     | MercadoPago                             |
-| Maps         | MapTiler                                |
-| AI Chatbot   | Groq                                    |
-| Deployment   | Vercel                                  |
+| Layer          | Technology                                           |
+|----------------|------------------------------------------------------|
+| **Framework** | Next.js (App Router), React, TypeScript              |
+| **Styling** | Tailwind CSS, PostCSS                                |
+| **State** | React Context API                                    |
+| **Payments** | MercadoPago                                          |
+| **Maps** | MapTiler                                             |
+| **AI Chatbot** | Groq                                                 |
+| **Database** | Supabase (PostgreSQL)                            |
+| **Security** | Infisical (End-to-End Secrets Management)         |
+| **Deployment** | Vercel (Frontend) & Render (Backend)         |
 
 ---
 
@@ -144,7 +145,7 @@ npm install
 
 ### 3. Configure Environment Variables
 
-Create a `.env.local` file in the root of the project and fill in your values:
+This project uses Infisical for secrets management in production. For local development, create a .env.local file based on the provided template:
 
 ```env
 # API Keys
@@ -152,9 +153,10 @@ NEXT_PUBLIC_API_URL=your_backend_api_url
 NEXT_PUBLIC_MAPTILER_API_KEY=your_maptiler_api_key
 GROQ_API_KEY=your_groq_api_key
 
-# Crons
-EMAIL_USER=your_email_address
-EMAIL_PASS=your_email_password
+# Cron jobs
+EMAIL_USER=your_gmail_address
+EMAIL_PASS=your_gmail_app_password  # 16-char app password from Google — NOT your Gmail password
+                                    # Generate one at: myaccount.google.com/apppasswords
 ```
 
 ---
@@ -179,7 +181,7 @@ For available API endpoints, refer to the [TicketLive-Back](https://github.com/1
 
 ## 🚀 Deployment
 
-This project is configured for deployment on **Vercel**. Push to your connected branch and Vercel will handle the build automatically.
+This project is configured for deployment on Vercel. Push to your connected branch and Vercel will handle the build automatically. Production environment variables are injected at build time via Infisical.
 
 ```bash
 npm run build   # Build for production
