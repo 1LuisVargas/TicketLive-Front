@@ -40,9 +40,8 @@
 | **Payments** | MercadoPago                                          |
 | **Maps** | MapTiler                                             |
 | **AI Chatbot** | Groq                                                 |
-| **Database** | Supabase (PostgreSQL)                            |
 | **Security** | Infisical (End-to-End Secrets Management)         |
-| **Deployment** | Vercel (Frontend) & Render (Backend)         |
+| **Deployment** | Vercel        |
 
 ---
 
