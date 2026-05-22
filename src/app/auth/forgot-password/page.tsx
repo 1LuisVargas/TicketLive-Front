@@ -5,8 +5,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Mail, ArrowLeft, Clock, CheckCircle, Loader2 } from "lucide-react";
 import { toast } from "sonner";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+import { API_URL } from "@/lib/api";
 
 export default function ForgotPasswordPage() {
   const router = useRouter();
@@ -77,24 +76,31 @@ export default function ForgotPasswordPage() {
                 ¡Email Enviado!
               </h2>
               <p className="text-gray-300 mb-6">
-                Si el email existe en nuestro sistema, recibirás un enlace para restablecer tu contraseña.
+                Si el email existe en nuestro sistema, recibirás un enlace para
+                restablecer tu contraseña.
               </p>
 
               <div className="space-y-3 mb-6">
                 <div className="bg-zinc-800/50 rounded-lg p-4 text-left">
-                  <p className="text-sm text-gray-400 mb-2">📧 Revisa tu bandeja de entrada</p>
+                  <p className="text-sm text-gray-400 mb-2">
+                    📧 Revisa tu bandeja de entrada
+                  </p>
                   <p className="text-xs text-gray-500">
                     El email puede tardar unos minutos en llegar
                   </p>
                 </div>
                 <div className="bg-zinc-800/50 rounded-lg p-4 text-left">
-                  <p className="text-sm text-gray-400 mb-2">📁 Revisa spam o promociones</p>
+                  <p className="text-sm text-gray-400 mb-2">
+                    📁 Revisa spam o promociones
+                  </p>
                   <p className="text-xs text-gray-500">
                     A veces los emails automáticos llegan ahí
                   </p>
                 </div>
                 <div className="bg-zinc-800/50 rounded-lg p-4 text-left">
-                  <p className="text-sm text-gray-400 mb-2">⏱️ El enlace expira en 15 minutos</p>
+                  <p className="text-sm text-gray-400 mb-2">
+                    ⏱️ El enlace expira en 15 minutos
+                  </p>
                   <p className="text-xs text-gray-500">
                     Úsalo pronto para mayor seguridad
                   </p>
@@ -149,7 +155,8 @@ export default function ForgotPasswordPage() {
               <div className="flex items-center gap-2 text-orange-400">
                 <Clock className="w-4 h-4" />
                 <span className="text-sm">
-                  Podrás intentar de nuevo en {cooldownMinutes} minuto{cooldownMinutes !== 1 ? 's' : ''}
+                  Podrás intentar de nuevo en {cooldownMinutes} minuto
+                  {cooldownMinutes !== 1 ? "s" : ""}
                 </span>
               </div>
             </div>

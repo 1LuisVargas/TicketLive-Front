@@ -3,6 +3,7 @@
 import AdminGuard from "@/components/guards/AdminGuard";
 import { useState, useEffect } from "react";
 import { BackButton } from "@/components/ui/BackButton";
+import { API_URL } from "@/lib/api";
 
 interface Category {
   id: string;
@@ -77,19 +78,19 @@ export default function CategoriasPage() {
 
       switch (actionModal.type) {
         case "create":
-          endpoint = `${process.env.NEXT_PUBLIC_API_URL}/categories`;
+          endpoint = `${API_URL}/categories`;
           method = "POST";
           body = JSON.stringify({ name: categoryName.trim() });
           break;
         case "edit":
           if (!actionModal.category) return;
-          endpoint = `${process.env.NEXT_PUBLIC_API_URL}/categories/${actionModal.category.id}`;
+          endpoint = `${API_URL}/categories/${actionModal.category.id}`;
           method = "PATCH";
           body = JSON.stringify({ name: categoryName.trim() });
           break;
         case "delete":
           if (!actionModal.category) return;
-          endpoint = `${process.env.NEXT_PUBLIC_API_URL}/categories/${actionModal.category.id}`;
+          endpoint = `${API_URL}/categories/${actionModal.category.id}`;
           method = "DELETE";
           break;
       }

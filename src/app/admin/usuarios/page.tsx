@@ -1,11 +1,9 @@
 "use client";
 
 import AdminGuard from "@/components/guards/AdminGuard";
-import Link from "next/link";
 import { useState, useEffect } from "react";
 import { BackButton } from "@/components/ui/BackButton";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
+import { API_URL } from "@/lib/api";
 
 interface User {
   id: string;
@@ -49,6 +47,11 @@ export default function UsuariosPage() {
       setLoading(true);
       const response = await fetch(
         `${API_URL}/users?page=${currentPage}&limit=50`,
+        {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+        },
       );
 
       if (!response.ok) {

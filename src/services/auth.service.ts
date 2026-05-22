@@ -2,8 +2,7 @@ import { User, AuthResponse } from "@/interfaces/user.interface";
 import { LoginFormValuesType } from "@/validators/loginSchema";
 import { RegisterFormValuesType } from "@/validators/registerSchema";
 import { UpdateUserProfileDto } from "@/interfaces/update-user-profile.interface";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
+import { API_URL } from "@/lib/api";
 
 /**
  * Error personalizado para autenticación
