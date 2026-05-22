@@ -12,8 +12,7 @@ import {
   AlertTriangle,
 } from "lucide-react";
 import { BackButton } from "@/components/ui/BackButton";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
+import { API_URL } from "@/lib/api";
 
 interface Coupon {
   id: string;

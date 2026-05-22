@@ -4,8 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
 import ImageUpload from "@/components/imageUpload/ImageUpload";
 import AdminGuard from "@/components/guards/AdminGuard";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
+import { API_URL } from "@/lib/api";
 
 interface Category {
   id: string;
@@ -151,7 +150,7 @@ export default function EditarEventoPage() {
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
+    >,
   ) => {
     const { name, value, type } = e.target;
 
@@ -319,7 +318,9 @@ export default function EditarEventoPage() {
               </svg>
               Volver
             </button>
-            <h1 className="text-4xl font-bold text-white mb-2">Editar Evento</h1>
+            <h1 className="text-4xl font-bold text-white mb-2">
+              Editar Evento
+            </h1>
             <p className="text-gray-400">Modifica la información del evento</p>
           </div>
 

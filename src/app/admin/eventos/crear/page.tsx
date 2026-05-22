@@ -5,8 +5,7 @@ import { useRouter } from "next/navigation";
 import ImageUpload from "@/components/imageUpload/ImageUpload";
 import AdminGuard from "@/components/guards/AdminGuard";
 import { BackButton } from "@/components/ui/BackButton";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
+import { API_URL } from "@/lib/api";
 
 interface Category {
   id: string;

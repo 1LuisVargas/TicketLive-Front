@@ -3,10 +3,18 @@
 
 import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Lock, Eye, EyeOff, Check, X, Loader2, KeyRound, AlertCircle } from "lucide-react";
+import {
+  Lock,
+  Eye,
+  EyeOff,
+  Check,
+  X,
+  Loader2,
+  KeyRound,
+  AlertCircle,
+} from "lucide-react";
 import { toast } from "sonner";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+import { API_URL } from "@/lib/api";
 
 export default function ResetPasswordPage() {
   const router = useRouter();
@@ -33,12 +41,14 @@ export default function ResetPasswordPage() {
 
   useEffect(() => {
     const urlToken = searchParams.get("token");
-    
+
     if (urlToken) {
       setToken(urlToken);
     } else {
       setTokenError(true);
-      toast.error("Token no encontrado. Solicita un nuevo enlace de recuperación.");
+      toast.error(
+        "Token no encontrado. Solicita un nuevo enlace de recuperación.",
+      );
     }
   }, [searchParams]);
 
@@ -101,7 +111,10 @@ export default function ResetPasswordPage() {
         toast.success("¡Contraseña restablecida exitosamente!");
       } else {
         toast.error(data.message || "Error al restablecer contraseña");
-        if (data.message?.includes("inválido") || data.message?.includes("expirado")) {
+        if (
+          data.message?.includes("inválido") ||
+          data.message?.includes("expirado")
+        ) {
           setTokenError(true);
         }
       }
@@ -130,7 +143,8 @@ export default function ResetPasswordPage() {
                 Enlace Inválido o Expirado
               </h2>
               <p className="text-gray-300 mb-6">
-                El enlace que usaste no es válido o ya expiró. Los enlaces de recuperación expiran después de 15 minutos.
+                El enlace que usaste no es válido o ya expiró. Los enlaces de
+                recuperación expiran después de 15 minutos.
               </p>
 
               <div className="space-y-3">
@@ -169,7 +183,8 @@ export default function ResetPasswordPage() {
                 ¡Contraseña Restablecida!
               </h2>
               <p className="text-gray-300 mb-6">
-                Tu contraseña ha sido actualizada exitosamente. Ya puedes iniciar sesión con tu nueva contraseña.
+                Tu contraseña ha sido actualizada exitosamente. Ya puedes
+                iniciar sesión con tu nueva contraseña.
               </p>
 
               <button
@@ -196,8 +211,12 @@ export default function ResetPasswordPage() {
               <KeyRound className="w-6 h-6 text-purple-400" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-white">Nueva Contraseña</h1>
-              <p className="text-sm text-gray-400">Crea una contraseña segura</p>
+              <h1 className="text-2xl font-bold text-white">
+                Nueva Contraseña
+              </h1>
+              <p className="text-sm text-gray-400">
+                Crea una contraseña segura
+              </p>
             </div>
           </div>
 
@@ -222,19 +241,40 @@ export default function ResetPasswordPage() {
                   onClick={() => togglePassword("new")}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white"
                 >
-                  {showPasswords.new ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                  {showPasswords.new ? (
+                    <EyeOff className="w-5 h-5" />
+                  ) : (
+                    <Eye className="w-5 h-5" />
+                  )}
                 </button>
               </div>
 
               {/* Password Strength Indicators */}
               {formData.newPassword && (
                 <div className="mt-3 space-y-2 p-3 bg-zinc-800/50 rounded-lg border border-zinc-700">
-                  <p className="text-xs font-medium text-gray-400 mb-2">Requisitos:</p>
-                  <PasswordRequirement met={passwordStrength.hasLength} text="Mínimo 8 caracteres" />
-                  <PasswordRequirement met={passwordStrength.hasLower} text="Una letra minúscula" />
-                  <PasswordRequirement met={passwordStrength.hasUpper} text="Una letra mayúscula" />
-                  <PasswordRequirement met={passwordStrength.hasNumber} text="Un número" />
-                  <PasswordRequirement met={passwordStrength.hasSpecial} text="Un carácter especial (!@#$%^&*)" />
+                  <p className="text-xs font-medium text-gray-400 mb-2">
+                    Requisitos:
+                  </p>
+                  <PasswordRequirement
+                    met={passwordStrength.hasLength}
+                    text="Mínimo 8 caracteres"
+                  />
+                  <PasswordRequirement
+                    met={passwordStrength.hasLower}
+                    text="Una letra minúscula"
+                  />
+                  <PasswordRequirement
+                    met={passwordStrength.hasUpper}
+                    text="Una letra mayúscula"
+                  />
+                  <PasswordRequirement
+                    met={passwordStrength.hasNumber}
+                    text="Un número"
+                  />
+                  <PasswordRequirement
+                    met={passwordStrength.hasSpecial}
+                    text="Un carácter especial (!@#$%^&*)"
+                  />
                 </div>
               )}
             </div>
@@ -249,7 +289,12 @@ export default function ResetPasswordPage() {
                 <input
                   type={showPasswords.confirm ? "text" : "password"}
                   value={formData.confirmPassword}
-                  onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      confirmPassword: e.target.value,
+                    })
+                  }
                   className="w-full pl-10 pr-12 py-3 bg-zinc-800 border border-zinc-700 rounded-lg text-white focus:outline-none focus:border-purple-500"
                   placeholder="Confirma tu nueva contraseña"
                 />
@@ -258,7 +303,11 @@ export default function ResetPasswordPage() {
                   onClick={() => togglePassword("confirm")}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white"
                 >
-                  {showPasswords.confirm ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                  {showPasswords.confirm ? (
+                    <EyeOff className="w-5 h-5" />
+                  ) : (
+                    <Eye className="w-5 h-5" />
+                  )}
                 </button>
               </div>
 
@@ -283,7 +332,11 @@ export default function ResetPasswordPage() {
             {/* Submit Button */}
             <button
               type="submit"
-              disabled={loading || !isPasswordValid() || formData.newPassword !== formData.confirmPassword}
+              disabled={
+                loading ||
+                !isPasswordValid() ||
+                formData.newPassword !== formData.confirmPassword
+              }
               className="w-full px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-lg font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed mt-6"
             >
               {loading ? (

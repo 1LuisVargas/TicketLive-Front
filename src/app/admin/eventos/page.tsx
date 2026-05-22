@@ -5,8 +5,7 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { BackButton } from "@/components/ui/BackButton";
 import Image from "next/image";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
+import { API_URL } from "@/lib/api";
 
 interface Event {
   id: string;
