@@ -21,18 +21,18 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://your-production-domain.com"), // Replace with your actual live domain (e.g., https://ticketlive.vercel.app)
+  metadataBase: new URL("https://ticket-live-front.vercel.app"),
   title: "TicketLive - Premium Concert Tickets",
   description:
-    "Secure tickets for the best live events, concerts, and festivals.",
+    "Descubre y reserva entradas exclusivas para los mejores conciertos, festivales y eventos en vivo con la máxima seguridad y comodidad.",
   icons: {
     icon: "/favicon.svg",
   },
   openGraph: {
     title: "TicketLive - Premium Concert Tickets",
     description:
-      "Secure tickets for the best live events, concerts, and festivals.",
-    url: "https://your-production-domain.com", // Replace with your actual live domain
+      "Secure tickets for the best live concerts, premier music festivals, and sports events worldwide with guaranteed authenticity and instant booking.",
+    url: "https://ticket-live-front.vercel.app",
     siteName: "TicketLive",
     images: [
       {
@@ -49,7 +49,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "TicketLive - Premium Concert Tickets",
     description:
-      "Secure tickets for the best live events, concerts, and festivals.",
+      "Descubre y reserva entradas exclusivas para los mejores conciertos, festivales y eventos en vivo con la máxima seguridad y comodidad.",
     images: [
       "https://res.cloudinary.com/dkcefbwq0/image/upload/v1794269992/Gemini_Generated_Image_e9n3jge9n3jge9n3_sispxm.jpg",
     ],
