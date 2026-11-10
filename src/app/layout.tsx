@@ -21,12 +21,39 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://your-production-domain.com"), // Replace with your actual live domain (e.g., https://ticketlive.vercel.app)
   title: "TicketLive - Premium Concert Tickets",
   description:
     "Secure tickets for the best live events, concerts, and festivals.",
   icons: {
     icon: "/favicon.svg",
-  }
+  },
+  openGraph: {
+    title: "TicketLive - Premium Concert Tickets",
+    description:
+      "Secure tickets for the best live events, concerts, and festivals.",
+    url: "https://your-production-domain.com", // Replace with your actual live domain
+    siteName: "TicketLive",
+    images: [
+      {
+        url: "https://res.cloudinary.com/dkcefbwq0/image/upload/v1794269992/Gemini_Generated_Image_e9n3jge9n3jge9n3_sispxm.jpg",
+        width: 1200,
+        height: 627,
+        alt: "TicketLive - Vive lo extraordinario",
+      },
+    ],
+    locale: "es_ES",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "TicketLive - Premium Concert Tickets",
+    description:
+      "Secure tickets for the best live events, concerts, and festivals.",
+    images: [
+      "https://res.cloudinary.com/dkcefbwq0/image/upload/v1794269992/Gemini_Generated_Image_e9n3jge9n3jge9n3_sispxm.jpg",
+    ],
+  },
 };
 
 export default function RootLayout({
